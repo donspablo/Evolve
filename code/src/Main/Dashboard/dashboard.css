@@ -1,0 +1,10 @@
+#dashboard{
+    background:linear-gradient(180deg, #1B1E21 0%, #121515 100%);
+    color:white;
+    box-sizing:border-box;
+    width:100%;
+    height:150vh;
+    padding:20px;
+    font-weight:300;
+    font-size:2rem;
+}

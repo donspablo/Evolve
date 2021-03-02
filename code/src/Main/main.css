@@ -1,0 +1,5 @@
+#main{
+    display:grid;
+    grid-template-columns: 80px auto;
+    width:100%;
+}

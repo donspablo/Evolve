@@ -1,0 +1,8 @@
+#sidebar{
+    background: linear-gradient(180deg, #92ECEC 0%, #14CCCC 100%);
+    width:100%;
+    display:flex;
+    align-items: center;
+    justify-content:start;
+    flex-direction:column;
+}
