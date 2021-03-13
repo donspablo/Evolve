@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from "react";
-import Icon from "./Icon";
+import Icon from "../Components/Icon";
 import "./sidebar.css";
-import logo from "../Images/logo_vector.png";
+import logo from "../../Images/logo_vector.png";
+import defaultPageStyles from "../../Styles/defaultPageStyles";
 
 const Sidebar = (props) => {
   return (
-    <div id="sidebar">
+    <div id="sidebar" style={defaultPageStyles.sidebaranimationStyle}>
       {/*Logo*/}
-      <img src={logo} height="80" width="80" style={{marginBottom:"15px"}} />
+      <img
+        src={logo}
+        height="80"
+        width="80"
+        style={{
+          opacity:"0",
+          marginBottom: "15px",
+          animation:
+            "icon-opacity-change 0.75s 0.1s cubic-bezier(.18,.87,.92,1) forwards",
+        }}
+      />
 
       {/*Home icon*/}
       <Icon
@@ -32,14 +43,14 @@ const Sidebar = (props) => {
           rx="14.9809"
           ry="14.9809"
           stroke="white"
-          strokeWidth="1.5"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <path
           d="M30.0305 30.8085L35.9039 36.6667"
           stroke="white"
-          strokeWidth="1.5"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
@@ -57,7 +68,7 @@ const Sidebar = (props) => {
             <path
               d="M12.3766 25.2517L17.4899 18.606L23.3224 23.1876L28.3262 16.7296"
               stroke="white"
-              strokeWidth="1.5"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -67,14 +78,14 @@ const Sidebar = (props) => {
               rx="3.28375"
               ry="3.28375"
               stroke="white"
-              strokeWidth="1.5"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             <path
               d="M25.496 5.33023H13.0803C7.93572 5.33023 4.74579 8.97363 4.74579 14.1182V27.9256C4.74579 33.0701 7.87317 36.6979 13.0803 36.6979H27.779C32.9235 36.6979 36.1134 33.0701 36.1134 27.9256V15.9008"
               stroke="white"
-              strokeWidth="1.5"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -103,21 +114,21 @@ const Sidebar = (props) => {
             <path
               d="M27.5034 28.391H14.8683"
               stroke="white"
-              strokeWidth="1.5"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             <path
               d="M27.5034 21.0646H14.8683"
               stroke="white"
-              strokeWidth="1.5"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             <path
               d="M19.6898 13.7552H14.8685"
               stroke="white"
-              strokeWidth="1.5"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -126,7 +137,7 @@ const Sidebar = (props) => {
               clipRule="evenodd"
               d="M27.84 4.81215C27.84 4.81215 14.4053 4.81915 14.3843 4.81915C9.55429 4.8489 6.56354 8.0269 6.56354 12.8744V28.9674C6.56354 33.8394 9.57704 37.0297 14.449 37.0297C14.449 37.0297 27.882 37.0244 27.9048 37.0244C32.7348 36.9947 35.7273 33.8149 35.7273 28.9674V12.8744C35.7273 8.0024 32.712 4.81215 27.84 4.81215Z"
               stroke="white"
-              strokeWidth="1.5"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />

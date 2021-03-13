@@ -1,0 +1,10 @@
+#content{
+    background:linear-gradient(180deg, #1B1E21 0%, #121515 100%);
+    color:white;
+    height:150vh;
+    width:100%;
+}
+
+#page-render{
+    margin-top:20px;
+}

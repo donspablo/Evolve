@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './main.css';
-import Sidebar from './Sidebar';
-import Dashboard from './Dashboard/Dashboard';
+import Sidebar from './Sidebar/Sidebar';
+import Content from './Content';
 
 const Main = (props) => {
 
@@ -15,7 +15,7 @@ const Main = (props) => {
     return(
         <div id="main">
         <Sidebar fillvalue={curpage} setpage={setnewcurpage}/>
-        <Dashboard />
+        <Content currentpage={curpage}/>
         </div>
     );
 }

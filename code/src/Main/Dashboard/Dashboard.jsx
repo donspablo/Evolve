@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './dashboard.css';
+import defaultPageStyles from '../../Styles/defaultPageStyles';
 
 const Dashboard = (props) => {
 
-    const [count, setCount] = useState(0);
-
-    useEffect(() => {
-        const timer = setTimeout(() => setCount(count+1), 1000);
-        return () => clearTimeout(timer);
-    }, [count, setCount])
-
     return(
-        <div id="dashboard">
-            Welcome UserName
+        <div id="dashboard" style={defaultPageStyles.pageStyle}>
+                This is the dashboard
         </div>
     )
 }

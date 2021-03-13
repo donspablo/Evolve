@@ -1,5 +1,4 @@
 /* Add CSS styles here! */
-
 body {
   margin:0;
   font-family: "HelveticaNeueCyr", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -7,8 +6,15 @@ body {
 
 .icon{
   transition:all 0.15s ease-in-out;
+  opacity:0;
 }
 
 .icon:hover{
   transform:scale(1.2);
+}
+
+@keyframes icon-opacity-change{
+  100%{
+    opacity:1;
+  }
 }

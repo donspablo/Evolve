@@ -6,3 +6,10 @@
     justify-content:start;
     flex-direction:column;
 }
+
+@keyframes fade-in{
+
+    100%{
+        transform:translateY(0);
+    }
+  }
