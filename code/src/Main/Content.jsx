@@ -13,7 +13,7 @@ const Content = (props) => {
 
     return(
         <div id="content">
-            <TopBar user={{name:"Indrajit"}} />
+            <TopBar logout={props.logout}/>
             <div id="page-render">
                 {props.currentpage == 1 && <Dashboard />}
                 {props.currentpage == 2 && <Search />}

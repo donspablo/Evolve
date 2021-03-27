@@ -1,6 +1,6 @@
-#login {
-  background: linear-gradient(180deg, #1b1e21 0%, #121515 100%);
-  color: white;
+#register {
+  background:linear-gradient(180deg, #1B1E21 0%, #121515 100%);
+  color:white;
   overflow-y: auto;
   overflow-x: hidden;
   min-height:100vh;
@@ -11,7 +11,7 @@
   justify-content: center;
 }
 
-#login #holder {
+#register #holder {
   margin:25px auto;
   scroll-behavior: smooth;
   display: flex;
@@ -20,7 +20,7 @@
   justify-content: center;
   overflow: auto;
   background-color: #3c3f41;
-  /*box-shadow: 0 25px 50px -12px rgba(41, 41, 41, 0.25);*/
+  /*box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);*/
   box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
     0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
     0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
@@ -29,14 +29,14 @@
   padding: 40px 25px;
 }
 
-#login #holder #error {
+#register #holder #error {
   padding:15px;
   color:#FD1C03;
   border:1px solid #FD1C03;
   margin-bottom:15px;
 }
 
-#login #holder form {
+#register #holder form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,11 +44,11 @@
   width: 100%;
 }
 
-#login #holder form #label {
+#register #holder form #label {
   font-size: 1.8rem;
 }
 
-#login #holder form input[type="text"],
+#register #holder form input[type="text"],
 input[type="password"] {
   margin: 10px auto;
   padding: 15px;
@@ -60,7 +60,7 @@ input[type="password"] {
   box-sizing: border-box;
 }
 
-#login #holder form button {
+#register #holder form button {
   font-family: "HelveticaNeueCyr", "HelveticaNeue-Light", "Helvetica Neue Light",
     "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   width: 60%;
@@ -77,31 +77,31 @@ input[type="password"] {
   transition: all 0.15s ease-in-out;
 }
 
-#login #holder form button:hover {
+#register #holder form button:hover {
   border: 1px solid #14cccc;
   color: white;
   background: #14cccc;
 }
 
-#login #holder form #new-user {
+#register #holder form #old-user {
   font-size: 1rem;
 }
 
-#login #holder form #new-user a,
+#register #holder form #old-user a,
 a:visited,
 a:focus {
   color: #14cccc;
   text-decoration: none;
 }
 
-#login #holder form #new-user a:hover {
+#register #holder form #old-user a:hover {
   text-decoration: underline;
 }
 
 /*TO DO - change font size for various screen sizes if time permits */
 
-@media screen and (max-height: 500px) {
-  #login #holder {
+@media screen and (max-height: 720px) {
+  #register #holder {
     display: block;
     overflow: auto;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);

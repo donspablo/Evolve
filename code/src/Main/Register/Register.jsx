@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./login.css";
+import "./register.css";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 
-const Login = (props) => {
-
+const Register = (props) => {
   //if already logged in, redirect directly to dashboard
   if (props.isAuthenticated) {
     let username = localStorage.getItem("username");
     return <Redirect to={`/dashboard/${username}`} />;
   }
 
-  const [data, setData] = useState({ email: "", password: "" });
+  const [data, setData] = useState({
+    firstName: "",
+    lastName: "",
+    location: "",
+    email: "",
+    password: "",
+  });
+
   const [error, setError] = useState({ isSet: false, errorDesc: "" });
 
   let errorSet = (desc) => {
@@ -21,29 +27,37 @@ const Login = (props) => {
 
   let changeData = (e, type) => {
     setData({
-      email: type === 1 ? e.target.value : data.email,
-      password: type === 2 ? e.target.value : data.password,
+      firstName: type === 1 ? e.target.value : data.firstName,
+      lastName: type === 2 ? e.target.value : data.lastName,
+      location: type === 3 ? e.target.value : data.location,
+      email: type === 4 ? e.target.value : data.email,
+      password: type === 5 ? e.target.value : data.password,
     });
   };
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-
     //TO DO - Perform validation of email
 
-    const LOGIN_ENDPOINT = "http://localhost:80/evolve/login.php";
+    const REGISTER_ENDPOINT = "http://localhost:80/evolve/register.php";
 
     try {
-      let response = await axios.post(LOGIN_ENDPOINT, data);
+      let response = await axios.post(REGISTER_ENDPOINT, data);
       //console.log(response);
 
       //there is an error
       if (response.data.error !== undefined) {
-        console.log(response.data.error);
+        //console.log(response.data.error);
         document.getElementById("holder").scrollTo(0, 0);
 
         //resetting the form
-        setData({ email: "", password: "" });
+        setData({
+          firstName: "",
+          lastName: "",
+          location: "",
+          email: "",
+          password: "",
+        });
 
         //setting the error
         errorSet(response.data.error);
@@ -51,6 +65,7 @@ const Login = (props) => {
         response.status === 200 &&
         response.data.userData.token
       ) {
+        console.log("Token:" + response.data.userData.token);
 
         let jwt = response.data.userData.token;
         let uid = response.data.userData.uid;
@@ -69,13 +84,11 @@ const Login = (props) => {
   };
 
   return (
-    <div id="login">
+    <div id="register">
       <div id="holder">
         <form onSubmit={(e) => handleSubmit(e)}>
-          <span id="label">Login into Evolve</span>
-
+          <span id="label">Become an Evolve member</span>
           {/*Vertical line*/}
-
           <div
             style={{
               height: "0.5px",
@@ -84,17 +97,45 @@ const Login = (props) => {
               margin: "25px",
             }}
           ></div>
-
           {/*error box*/}
           {error.isSet && <div id="error">{error.errorDesc}</div>}
-
+          <input
+            type="text"
+            title="First Name"
+            name="firstname"
+            value={data.firstName}
+            placeholder="First Name (Required)"
+            onChange={(e) => changeData(e, 1)}
+            spellCheck="false"
+            required
+          />
+          <input
+            type="text"
+            title="Last Name"
+            name="lastname"
+            value={data.lastName}
+            placeholder="Last Name"
+            onChange={(e) => changeData(e, 2)}
+            spellCheck="false"
+          />
+          {/*Change location to set of options only */}
+          <input
+            type="text"
+            title="Location"
+            name="location"
+            value={data.location}
+            placeholder="Location (Required)"
+            onChange={(e) => changeData(e, 3)}
+            spellCheck="false"
+            required
+          />
           <input
             type="text"
             title="Email"
             name="email"
             value={data.email}
-            placeholder="Email"
-            onChange={(e) => changeData(e, 1)}
+            placeholder="Email (Required)"
+            onChange={(e) => changeData(e, 4)}
             spellCheck="false"
             required
           />
@@ -103,14 +144,13 @@ const Login = (props) => {
             title="Password"
             name="password"
             value={data.password}
-            placeholder="Password"
-            onChange={(e) => changeData(e, 2)}
+            placeholder="Password (Required)"
+            onChange={(e) => changeData(e, 5)}
             required
           />
-          <button type="submit">Login</button>
-
-          <span id="new-user">
-            New User? <Link to="/register">Click Here</Link> to register!
+          <button type="submit">Register</button>
+          <span id="old-user">
+            Already registered? <Link to="/login">Click Here</Link> to Login!
           </span>
         </form>
       </div>
@@ -118,4 +158,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default Register;
