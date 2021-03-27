@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./register.css";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+import Loading from "../../Utils/Loading";
 
 const Register = (props) => {
   //if already logged in, redirect directly to dashboard
@@ -61,10 +62,7 @@ const Register = (props) => {
 
         //setting the error
         errorSet(response.data.error);
-      } else if (
-        response.status === 200 &&
-        response.data.userData.token
-      ) {
+      } else if (response.status === 200 && response.data.userData.token) {
         console.log("Token:" + response.data.userData.token);
 
         let jwt = response.data.userData.token;
@@ -83,7 +81,9 @@ const Register = (props) => {
     }
   };
 
-  return (
+  return props.loading === true ? (
+    <Loading />
+  ) : (
     <div id="register">
       <div id="holder">
         <form onSubmit={(e) => handleSubmit(e)}>

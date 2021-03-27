@@ -11,7 +11,6 @@ import ProtectedRoute from "./Utils/ProtectedRoute";
 import * as authservice from "./Services/Auth";
 
 export default function Routes() {
-
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, isLoading] = useState(true);
 
@@ -54,13 +53,22 @@ export default function Routes() {
           exact
           path="/"
           render={(props) => (
-            <Home isAuthenticated={isAuthenticated} loading={loading} {...props} />
+            <Home
+              isAuthenticated={isAuthenticated}
+              loading={loading}
+              {...props}
+            />
           )}
         />
         <Route
           path="/login"
           render={(props) => (
-            <Login isAuthenticated={isAuthenticated} login={login} {...props} />
+            <Login
+              isAuthenticated={isAuthenticated}
+              loading={loading}
+              login={login}
+              {...props}
+            />
           )}
         />
         <Route
@@ -68,6 +76,7 @@ export default function Routes() {
           render={(props) => (
             <Register
               isAuthenticated={isAuthenticated}
+              loading={loading}
               login={login}
               {...props}
             />

@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import "./login.css";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+import Loading from "../../Utils/Loading";
 
 const Login = (props) => {
-
   //if already logged in, redirect directly to dashboard
   if (props.isAuthenticated) {
     let username = localStorage.getItem("username");
@@ -47,11 +47,7 @@ const Login = (props) => {
 
         //setting the error
         errorSet(response.data.error);
-      } else if (
-        response.status === 200 &&
-        response.data.userData.token
-      ) {
-
+      } else if (response.status === 200 && response.data.userData.token) {
         let jwt = response.data.userData.token;
         let uid = response.data.userData.uid;
         let username = response.data.userData.name;
@@ -68,7 +64,9 @@ const Login = (props) => {
     }
   };
 
-  return (
+  return props.loading === true ? (
+    <Loading />
+  ) : (
     <div id="login">
       <div id="holder">
         <form onSubmit={(e) => handleSubmit(e)}>
