@@ -15,6 +15,7 @@ export default function Routes() {
   const [loading, isLoading] = useState(true);
 
   useEffect(() => {
+
     authservice
       .verifyToken(
         localStorage.getItem("userID"),
@@ -83,7 +84,7 @@ export default function Routes() {
           )}
         />
         <ProtectedRoute
-          path="/dashboard/:name"
+          path="/dashboard/:id"
           component={Main}
           isAuthenticated={isAuthenticated}
           logout={logout}

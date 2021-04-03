@@ -8,8 +8,8 @@ import Loading from "../../Utils/Loading";
 const Login = (props) => {
   //if already logged in, redirect directly to dashboard
   if (props.isAuthenticated) {
-    let username = localStorage.getItem("username");
-    return <Redirect to={`/dashboard/${username}`} />;
+    let uid = localStorage.getItem("userID");
+    return <Redirect to={`/dashboard/${uid}`} />;
   }
 
   const [data, setData] = useState({ email: "", password: "" });

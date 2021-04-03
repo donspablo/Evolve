@@ -1,8 +1,9 @@
 #topbar{
     box-sizing:border-box;
     width:100%;
+    margin:auto;
     padding:22.5px 25px 20px;
-    font-weight:300;
+    font-weight:200;
     font-size:1.8rem;
     display:flex;
     align-items:flex-start;

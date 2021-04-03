@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 
 const Main = (props) => {
     
-  if (props.match.params.name !== localStorage.getItem("username")) {
+  if (props.match.params.id !== localStorage.getItem("userID")) {
     return <Redirect to="/" />;
   }
 
