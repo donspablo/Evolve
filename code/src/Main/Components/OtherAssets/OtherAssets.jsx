@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
 import "../table.css";
-import './stocks.css';
-import StockDeleteOverlay from "./StockDeleteOverlay";
+import './otherassets.css';
+import OtherAssetDeleteOverlay from "./OtherAssetDeleteOverlay";
 import axios from "axios";
 
-const Stocks = (props) => {
+const OtherAssets = (props) => {
+
   let isunmounted = false;
 
-  let [stockData, setStockData] = useState([]);
-  let [deleteOverlay, setDeleteOverlay] = useState(-1); //using the deleteOverlay value to store the transaction ID of the stock to be deleted
+  let [otherAssetData, setotherAssetData] = useState([]);
+  let [deleteOverlay, setDeleteOverlay] = useState(-1); //using the deleteOverlay value to store the transaction ID of the other asset to be deleted
 
   let findTotalPurchasePrice = () => {
     //total purchase price variable
     let totalPurchasePrice = 0;
 
-    stockData.map((stock) => {
-      totalPurchasePrice += parseFloat(stock.purchase_price) * stock.quantity;
+    otherAssetData.map((otherAsset) => {
+      totalPurchasePrice += parseFloat(otherAsset.purchase_price);
     });
 
     return totalPurchasePrice.toFixed(2);
@@ -27,33 +28,33 @@ const Stocks = (props) => {
     return date[2] + "/" + date[1] + "/" + date[0];
   };
 
-  let fetchStockData = async () => {
+  let fetchotherAssetData = async () => {
 
     const data = {
       uid: localStorage.getItem("userID"),
-      assettype: 1, //to denote stock
+      assettype: 4, //to denote other asset
     };
 
-    //fetch stock data
-    const STOCK_ENDPOINT = "http://localhost:80/evolve/selectAsset.php";
+    //fetch other asset data
+    const OTHER_ENDPOINT = "http://localhost:80/evolve/selectAsset.php";
 
     try {
-      let response = await axios.post(STOCK_ENDPOINT, data);
+      let response = await axios.post(OTHER_ENDPOINT, data);
 
-      //console.log(isunmounted);
+      //console.log(!isunmounted);
 
       if (response.status === 200 && !isunmounted) {
         if (!response.data.msg) {
-          setStockData(response.data);
+          setotherAssetData(response.data);
         } else {
-          setStockData([]) //resetting stocks to none
+          setotherAssetData([]) //resetting other assets to none
         }
 
-        props.setloading(1, 0);
-        setDeleteOverlay(-1); //for closing the delete overlay on deleting stock
+        props.setloading(4, 0);
+        setDeleteOverlay(-1); //for closing the delete overlay on deleting other asset
 
-        if (props.currentOpenOverlay === 1 || props.currentOpenOverlay === 2) {
-          props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing stock
+        if (props.currentOpenOverlay === 7 || props.currentOpenOverlay === 8) {
+          props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing other asset
         }
       } else {
         console.log("Some error occurred!");
@@ -64,61 +65,58 @@ const Stocks = (props) => {
   };
 
   useEffect(() => {
-
     if (props.loading === 1) {
-      fetchStockData();
+      //console.log("called");
+      fetchotherAssetData();
     }
-    
+
     return () => {
+      //console.log("unmounted");
       isunmounted = true;
     };
 
   }, [props.loading]);
 
   useEffect(() => {
-    props.setPurchasePrice(1, findTotalPurchasePrice());
+    props.setPurchasePrice(4, findTotalPurchasePrice());
   }, [props.isDataLoaded])
 
   return (
     <>
       {deleteOverlay !== -1 && (
-        <StockDeleteOverlay
-          stocktid={deleteOverlay} //this variable stores the transaction id of the stock to be deleted
+        <OtherAssetDeleteOverlay
+          otherAssettid={deleteOverlay} //this variable stores the transaction id of the otherAsset to be deleted
           setOverlay={setDeleteOverlay}
-          height={document.getElementById("stocks").clientHeight}
+          height={document.getElementById("other-assets").clientHeight}
           startLoadingAgain={props.setloading}
         />
       )}
-      {stockData.length > 0 ?
+      {otherAssetData.length > 0 ?
         <>
           <table id="main-table">
             <thead>
               <tr className="header">
-                <th>Symbol</th>
+                <th>Asset Type</th>
                 <th>Description</th>
                 <th>Purchase Date</th>
-                <th>Quantity</th>
                 <th>Purchase Price</th>
-                <th>Current Price</th>
-                <th>Total Gain/Loss</th>
+                <th>Annual Return</th>
               </tr>
             </thead>
             <tbody>
               {
-                stockData.map((stock, index) => {
+                otherAssetData.map((otherAsset, index) => {
                   return (
                     <tr
                       className="data"
                       key={index}
                       style={{ background: props.gradient }}
                     >
-                      <td>{stock.symbol}</td>
-                      <td title={stock.stock_description}>{stock.stock_description}</td>
-                      <td>{convertDateFormat(stock.purchase_date)}</td>
-                      <td>{stock.quantity}</td>
-                      <td>{"$" + stock.purchase_price}</td>
-                      <td>current price</td>
-                      <td>calculate</td>
+                      <td>{otherAsset.asset_type}</td>
+                      <td title={otherAsset.asset_description}>{otherAsset.asset_description}</td>
+                      <td>{convertDateFormat(otherAsset.purchase_date)}</td>
+                      <td>{"$" + otherAsset.purchase_price}</td>
+                      <td>{otherAsset.annual_return === "0.00" ? "-" : otherAsset.annual_return + "%"}</td>
                     </tr>
                   );
                 })}
@@ -128,10 +126,8 @@ const Stocks = (props) => {
                 <td></td>
                 <td>TOTAL</td>
                 <td></td>
-                <td></td>
                 <td>{"$" + findTotalPurchasePrice()}</td>
-                <td>total currentPrice</td>
-                <td>total gain/loss</td>
+                <td></td>
               </tr>
 
             </tbody>
@@ -145,17 +141,17 @@ const Stocks = (props) => {
               </thead>
               <tbody>
 
-                {stockData.map((stock, index) => {
+                {otherAssetData.map((otherAsset, index) => {
                   {
-                    /*Stock data*/
+                    /*other asset data*/
                   }
-                  let stockdata = {
-                    stockTransactionID: stock.stock_transaction_ID,
-                    symbol: stock.symbol,
-                    desc: stock.stock_description,
-                    quantity: stock.quantity,
-                    purchasePrice: stock.purchase_price,
-                    purchaseDate: stock.purchase_date,
+                  let otherAssetdata = {
+                    otherAssetTransactionID: otherAsset.other_assets_transaction_ID,
+                    assetType: otherAsset.asset_type,
+                    desc: otherAsset.asset_description,
+                    annualReturn: otherAsset.annual_return === "0.00" ? '' : otherAsset.annual_return,
+                    purchasePrice: otherAsset.purchase_price,
+                    purchaseDate: otherAsset.purchase_date,
                   };
                   return (
                     <tr className="data" key={index}>
@@ -163,7 +159,7 @@ const Stocks = (props) => {
                         <div className="edit-icons">
                           {/*Edit icon*/}
                           <svg
-                            onClick={() => props.openOverlay(stockdata, 2)}
+                            onClick={() => props.openOverlay(otherAssetdata, 8)}
                             width="30"
                             height="30"
                             viewBox="0 0 40 40"
@@ -198,7 +194,7 @@ const Stocks = (props) => {
 
                           <svg
                             width="28"
-                            onClick={() => setDeleteOverlay(stockdata.stockTransactionID)}
+                            onClick={() => setDeleteOverlay(otherAssetdata.otherAssetTransactionID)}
                             height="28"
                             viewBox="0 0 38 38"
                             fill="none"
@@ -235,9 +231,9 @@ const Stocks = (props) => {
               </tbody>
             </table>
           </div>
-        </> : props.loading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your stocks... </div> : <div className="msg"> No stocks added yet! </div>}
+        </> : props.loading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your other assets... </div> : <div className="msg">No assets added yet! </div>}
     </>
   );
 };
 
-export default Stocks;
+export default OtherAssets;

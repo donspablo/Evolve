@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
 import "../table.css";
-import './stocks.css';
-import StockDeleteOverlay from "./StockDeleteOverlay";
+import './bonds.css';
+import BondDeleteOverlay from "./BondDeleteOverlay";
 import axios from "axios";
 
-const Stocks = (props) => {
+const Bonds = (props) => {
+
   let isunmounted = false;
 
-  let [stockData, setStockData] = useState([]);
-  let [deleteOverlay, setDeleteOverlay] = useState(-1); //using the deleteOverlay value to store the transaction ID of the stock to be deleted
+  let [bondData, setBondData] = useState([]);
+  let [deleteOverlay, setDeleteOverlay] = useState(-1); //using the deleteOverlay value to store the transaction ID of the bond to be deleted
 
-  let findTotalPurchasePrice = () => {
+  let findTotalFaceValue = () => {
     //total purchase price variable
     let totalPurchasePrice = 0;
 
-    stockData.map((stock) => {
-      totalPurchasePrice += parseFloat(stock.purchase_price) * stock.quantity;
+    bondData.map((bond) => {
+      totalPurchasePrice += parseFloat(bond.face_value);
     });
 
     return totalPurchasePrice.toFixed(2);
@@ -27,33 +28,30 @@ const Stocks = (props) => {
     return date[2] + "/" + date[1] + "/" + date[0];
   };
 
-  let fetchStockData = async () => {
+  let fetchBondData = async () => {
 
     const data = {
       uid: localStorage.getItem("userID"),
-      assettype: 1, //to denote stock
+      assettype: 3, //to denote bond
     };
 
-    //fetch stock data
-    const STOCK_ENDPOINT = "http://localhost:80/evolve/selectAsset.php";
+    //fetch bond data
+    const BOND_ENDPOINT = "http://localhost:80/evolve/selectAsset.php";
 
     try {
-      let response = await axios.post(STOCK_ENDPOINT, data);
-
-      //console.log(isunmounted);
+      let response = await axios.post(BOND_ENDPOINT, data);
 
       if (response.status === 200 && !isunmounted) {
         if (!response.data.msg) {
-          setStockData(response.data);
+          setBondData(response.data);
         } else {
-          setStockData([]) //resetting stocks to none
+          setBondData([]) //resetting bonds to none
         }
 
-        props.setloading(1, 0);
-        setDeleteOverlay(-1); //for closing the delete overlay on deleting stock
-
-        if (props.currentOpenOverlay === 1 || props.currentOpenOverlay === 2) {
-          props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing stock
+        props.setloading(3, 0);
+        setDeleteOverlay(-1); //for closing the delete overlay on deleting bond
+        if (props.currentOpenOverlay === 5 || props.currentOpenOverlay === 6) {
+          props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing bond
         }
       } else {
         console.log("Some error occurred!");
@@ -64,11 +62,10 @@ const Stocks = (props) => {
   };
 
   useEffect(() => {
-
     if (props.loading === 1) {
-      fetchStockData();
+      fetchBondData();
     }
-    
+
     return () => {
       isunmounted = true;
     };
@@ -76,49 +73,51 @@ const Stocks = (props) => {
   }, [props.loading]);
 
   useEffect(() => {
-    props.setPurchasePrice(1, findTotalPurchasePrice());
+    props.setPurchasePrice(3, findTotalFaceValue());
   }, [props.isDataLoaded])
 
   return (
     <>
       {deleteOverlay !== -1 && (
-        <StockDeleteOverlay
-          stocktid={deleteOverlay} //this variable stores the transaction id of the stock to be deleted
+        <BondDeleteOverlay
+          bondtid={deleteOverlay} //this variable stores the transaction id of the bond to be deleted
           setOverlay={setDeleteOverlay}
-          height={document.getElementById("stocks").clientHeight}
+          height={document.getElementById("bonds").clientHeight}
           startLoadingAgain={props.setloading}
         />
       )}
-      {stockData.length > 0 ?
+      {bondData.length > 0 ?
         <>
           <table id="main-table">
             <thead>
               <tr className="header">
-                <th>Symbol</th>
+                <th>Type</th>
                 <th>Description</th>
                 <th>Purchase Date</th>
-                <th>Quantity</th>
-                <th>Purchase Price</th>
-                <th>Current Price</th>
-                <th>Total Gain/Loss</th>
+                <th>Face Value</th>
+                <th>Coupon Rate</th>
+                <th>Years to Maturity</th>
+                <th>Payment Interval</th>
+                <th>Current Bond Price</th>
               </tr>
             </thead>
             <tbody>
               {
-                stockData.map((stock, index) => {
+                bondData.map((bond, index) => {
                   return (
                     <tr
                       className="data"
                       key={index}
                       style={{ background: props.gradient }}
                     >
-                      <td>{stock.symbol}</td>
-                      <td title={stock.stock_description}>{stock.stock_description}</td>
-                      <td>{convertDateFormat(stock.purchase_date)}</td>
-                      <td>{stock.quantity}</td>
-                      <td>{"$" + stock.purchase_price}</td>
+                      <td>{bond.bond_type}</td>
+                      <td title={bond.bond_description}>{bond.bond_description}</td>
+                      <td>{convertDateFormat(bond.purchase_date)}</td>
+                      <td>{"$" + bond.face_value}</td>
+                      <td>{bond.coupon_rate + "%"}</td>
+                      <td>{bond.years_to_maturity}</td>
+                      <td>{bond.payment_interval}</td>
                       <td>current price</td>
-                      <td>calculate</td>
                     </tr>
                   );
                 })}
@@ -128,10 +127,11 @@ const Stocks = (props) => {
                 <td></td>
                 <td>TOTAL</td>
                 <td></td>
+                <td>{"$" + findTotalFaceValue()}</td>
                 <td></td>
-                <td>{"$" + findTotalPurchasePrice()}</td>
+                <td></td>
+                <td></td>
                 <td>total currentPrice</td>
-                <td>total gain/loss</td>
               </tr>
 
             </tbody>
@@ -145,17 +145,19 @@ const Stocks = (props) => {
               </thead>
               <tbody>
 
-                {stockData.map((stock, index) => {
+                {bondData.map((bond, index) => {
                   {
-                    /*Stock data*/
+                    /*bond data*/
                   }
-                  let stockdata = {
-                    stockTransactionID: stock.stock_transaction_ID,
-                    symbol: stock.symbol,
-                    desc: stock.stock_description,
-                    quantity: stock.quantity,
-                    purchasePrice: stock.purchase_price,
-                    purchaseDate: stock.purchase_date,
+                  let bonddata = {
+                    bondTransactionID: bond.bond_transaction_ID,
+                    bondtype: bond.bond_type,
+                    desc: bond.bond_description,
+                    faceValue: bond.face_value,
+                    couponRate:bond.coupon_rate,
+                    yearsToMaturity: bond.years_to_maturity,
+                    paymentInterval:bond.payment_interval,
+                    purchaseDate: bond.purchase_date
                   };
                   return (
                     <tr className="data" key={index}>
@@ -163,7 +165,7 @@ const Stocks = (props) => {
                         <div className="edit-icons">
                           {/*Edit icon*/}
                           <svg
-                            onClick={() => props.openOverlay(stockdata, 2)}
+                            onClick={() => props.openOverlay(bonddata, 6)}
                             width="30"
                             height="30"
                             viewBox="0 0 40 40"
@@ -198,7 +200,7 @@ const Stocks = (props) => {
 
                           <svg
                             width="28"
-                            onClick={() => setDeleteOverlay(stockdata.stockTransactionID)}
+                            onClick={() => setDeleteOverlay(bonddata.bondTransactionID)}
                             height="28"
                             viewBox="0 0 38 38"
                             fill="none"
@@ -235,9 +237,9 @@ const Stocks = (props) => {
               </tbody>
             </table>
           </div>
-        </> : props.loading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your stocks... </div> : <div className="msg"> No stocks added yet! </div>}
+        </> : props.loading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your bonds... </div> : <div className="msg"> No bonds added yet! </div>}
     </>
   );
 };
 
-export default Stocks;
+export default Bonds;

@@ -9,8 +9,9 @@
 }
 
 #overlay #box {
-  position: absolute;
-  height: 85%;
+  position: relative;
+  height: auto;
+  max-height:85%;
   width: 80%;
   top: 50%;
   left: 50%;
@@ -25,7 +26,6 @@
 #overlay #box #close {
   top: 0;
   left: 0;
-  background: linear-gradient(180deg, #d11e4b 0%, #ce2331 100%);
   padding: 15px;
   cursor: pointer;
 }

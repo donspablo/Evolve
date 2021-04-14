@@ -36,7 +36,7 @@
 }
 
 #form-content form input[type="text"],
-[type="date"] {
+[type="date"],.selectbox {
   margin: 10px auto;
   padding: 15px;
   outline: none;
@@ -45,6 +45,13 @@
     "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   width: 60%;
   box-sizing: border-box;
+  border:none;
+}
+
+select {
+  background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right white;
+  -webkit-appearance: none;
+  background-position: right 15px center;
 }
 
 [type="date"] {
@@ -59,7 +66,7 @@
   opacity: 0;
 }
 
-#form-content form button {
+#form-content form button, #status {
   font-family: "HelveticaNeueCyr", "HelveticaNeue-Light", "Helvetica Neue Light",
     "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   width: 60%;
@@ -72,6 +79,7 @@
   padding: 15px;
   border: 1px solid #14cccc;
   margin: 10px auto 50px;
+  text-align: center;
   cursor: pointer;
   transition: all 0.15s ease-in-out;
 }

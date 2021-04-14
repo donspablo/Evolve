@@ -2,18 +2,21 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../form.css";
 
-const StockForm = (props) => {
+const BondForm = (props) => {
+
   const [data, setData] = useState({
     uid: localStorage.getItem("userID"),
     type: "1",
-    symbol: "",
+    bondtype: "Corporate",
     desc: "",
-    quantity: "",
-    purchasePrice: "",
-    purchaseDate: "",
-  }); //type 1 is to denote to add stock to DB
+    faceValue: "",
+    couponRate: "",
+    yearsToMaturity: "",
+    paymentInterval: "Annual",
+    purchaseDate: ""
+  }); //type 1 is to denote to add bond to DB
   const [error, setError] = useState({ isSet: false, errorDesc: "" });
-  const [text, setText] = useState("Add Stock");
+  const [text, setText] = useState("Add Bond");
 
   let errorSet = (desc) => {
     setError({ isSet: true, errorDesc: desc });
@@ -34,41 +37,52 @@ const StockForm = (props) => {
   };
 
   let changeData = (e, type) => {
+
     setData({
       uid: data.uid,
       type: "1",
-      symbol: type === 1 ? e.target.value.toUpperCase() : data.symbol,
+      bondtype: type === 1 ? e.target.value : data.bondtype,
       desc: type === 2 ? e.target.value : data.desc,
-      quantity: type === 3 ? e.target.value : data.quantity,
-      purchasePrice: type === 4 ? e.target.value : data.purchasePrice,
-      purchaseDate: type === 5 ? e.target.value : data.purchaseDate,
+      faceValue: type === 3 ? e.target.value : data.faceValue,
+      couponRate: type === 4 ? e.target.value : data.couponRate,
+      yearsToMaturity: type === 5 ? e.target.value : data.yearsToMaturity,
+      paymentInterval: type === 6 ? e.target.value : data.paymentInterval,
+      purchaseDate: type === 7 ? e.target.value : data.purchaseDate
     });
   };
 
   let handleSubmit = async (e) => {
     e.preventDefault();
 
-    //TO DO - Validate quantity, purchase Price is given as numbers, purchaseDate given in required format
-    var numreg = new RegExp("^[0-9]+$");
+    //TO DO - Validation
     var decreg = new RegExp("^[0-9]+$|^[0-9]+.[0-9]+$");
+    var percentreg = /(^100(\.0{1,})?$)|(^([1-9]([0-9])?|1)(\.[0-9]{1,})?$)/;
 
-    if (!numreg.test(data.quantity)) {
-      errorSet("Please provide number input only for quantity!");
+    if (!decreg.test(data.faceValue)) {
+      errorSet("Please provide number input only for face value!");
       document.getElementById("form-content").scrollTo(0, 0);
-      Object.assign(data, { quantity: "" });
+      Object.assign(data, { faceValue: "" });
       return;
     }
 
-    if (!decreg.test(data.purchasePrice)) {
-      errorSet("Please provide number input only for purchase price!");
+    if (!percentreg.test(data.couponRate)) {
+      errorSet("Please provide a percentage value between 1 and 100 as input for coupon rate!");
       document.getElementById("form-content").scrollTo(0, 0);
-      Object.assign(data, { purchasePrice: "" });
+      Object.assign(data, { couponRate: "" });
+      return;
+    }
+
+
+    if (!percentreg.test(data.yearsToMaturity)) {
+      errorSet("Please provide a value between 1 and 100 as input for years to maturity!");
+      document.getElementById("form-content").scrollTo(0, 0);
+      Object.assign(data, { yearsToMaturity: "" });
       return;
     }
 
     setText("Adding...");
 
-    const ADD_ENDPOINT = "http://localhost:80/evolve/addEditDelStock.php";
+    const ADD_ENDPOINT = "http://localhost:80/evolve/addEditDelBond.php";
     //console.log(data);
 
     try {
@@ -82,20 +96,22 @@ const StockForm = (props) => {
 
         //resetting the form
         setData({
-          uid: data.uid,
+          uid: localStorage.getItem("userID"),
           type: "1",
-          symbol: "",
+          bondtype: "Corporate",
           desc: "",
-          quantity: "",
-          purchasePrice: "",
-          purchaseDate: "",
+          faceValue: "",
+          couponRate: "",
+          yearsToMaturity: "",
+          paymentInterval: "Annual",
+          purchaseDate: ""
         });
 
         //setting the error
         errorSet(response.data.error);
       } else if (response.status === 200) {
         console.log(response.data);
-        props.setloading(1, 1);
+        props.setloading(3, 1);
       }
     } catch (e) {
       console.log(e);
@@ -107,8 +123,8 @@ const StockForm = (props) => {
       <div id="box">
         <svg
           id="close"
-          onClick={text === "Add Stock" ? () =>  props.overlayhandle(0) : null}
-          style={{background: text === "Add Stock" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)"}}
+          onClick={text === "Add Bond" ? () => props.overlayhandle(0) : null}
+          style={{ background: text === "Add Bond" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)" }}
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -131,7 +147,7 @@ const StockForm = (props) => {
           />
         </svg>
         <div id="form-holder">
-          <span className="form-title">Add Stock</span>
+          <span className="form-title">Add Bond</span>
           {/*Vertical line*/}
 
           <div
@@ -148,16 +164,14 @@ const StockForm = (props) => {
               {/*error box*/}
               {error.isSet && <div id="error">{error.errorDesc}</div>}
 
-              <input
-                type="text"
-                title="Symbol"
-                name="symbol"
-                value={data.symbol}
-                placeholder="Symbol (Required in caps)"
-                onChange={(e) => changeData(e, 1)}
-                spellCheck="false"
-                required
-              />
+              <select className="selectbox" name="bondtype" value={data.bondtype} onChange={(e) => changeData(e, 1)} required>
+                <option value="Corporate">Corporate</option>
+                <option value="Municipal">Municipal</option>
+                <option value="Government">Government</option>
+                <option value="Agency">Agency</option>
+                <option value="Other">Other</option>
+              </select>
+
               <input
                 type="text"
                 title="Description"
@@ -170,23 +184,41 @@ const StockForm = (props) => {
 
               <input
                 type="text"
-                title="Quantity"
-                name="quantity"
-                value={data.quantity}
-                placeholder="Quantity (Required)"
+                title="Face Value"
+                name="faceValue"
+                value={data.faceValue}
+                placeholder="Face Value (Required)"
                 onChange={(e) => changeData(e, 3)}
-                spellCheck="false"
                 required
               />
+
               <input
                 type="text"
-                title="Purchase Price"
-                name="purchasePrice"
-                value={data.purchasePrice}
-                placeholder="Purchase Price in $ (Required)"
+                title="Coupon Rate"
+                name="couponRate"
+                value={data.couponRate}
+                placeholder="Coupon Rate in % (Required)"
                 onChange={(e) => changeData(e, 4)}
                 required
               />
+
+              <input
+                type="text"
+                title="Years to Maturity"
+                name="yearsToMaturity"
+                value={data.yearsToMaturity}
+                placeholder="Years to Maturity (Required)"
+                onChange={(e) => changeData(e, 5)}
+                required
+              />
+
+              <select className="selectbox" name="paymentInterval" value={data.paymentInterval} onChange={(e) => changeData(e, 6)} required>
+                <option value="Annual">Annual</option>
+                <option value="Semi Annual">Semi Annual</option>
+                <option value="Quarterly">Quarterly</option>
+                <option value="Monthly">Monthly</option>
+              </select>
+
               <input
                 type="date"
                 title="Purchase Date"
@@ -194,12 +226,12 @@ const StockForm = (props) => {
                 max={setMaxDate()}
                 value={data.purchaseDate}
                 placeholder="Purchase Date (Required in the form DD/MM/YYYY)"
-                onChange={(e) => changeData(e, 5)}
+                onChange={(e) => changeData(e, 7)}
                 required
               />
 
 
-              {text === "Add Stock" ? <button type="submit">{text}</button> : <span id="status">Adding...</span>}
+              {text === "Add Bond" ? <button type="submit">{text}</button> : <span id="status">Adding...</span>}
             </form>
           </div>
         </div>
@@ -208,4 +240,4 @@ const StockForm = (props) => {
   );
 };
 
-export default StockForm;
+export default BondForm;

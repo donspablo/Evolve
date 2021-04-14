@@ -1,0 +1,28 @@
+otherAssetData
+
+otherAssettid - delete
+
+other-assets - div id name
+
+asset_type
+asset_description
+annual_return
+purchase_date
+purchase_price
+
+uid: localStorage.getItem("userID"),
+    type: "1",
+    assetType:"",
+    desc: "",
+    annualReturn: "",
+    purchasePrice: "",
+    purchaseDate: "",
+
+const [text, setText] = useState("Add Asset");
+
+otherAssetTransactionID: otherAsset.other_assets_transaction_ID,
+ assetType: otherAsset.asset_type,
+ desc: otherAsset.asset_description,
+  annualReturn: otherAsset.annual_return,
+  purchasePrice: otherAsset.purchase_price,
+   purchaseDate: otherAsset.purchase_date,

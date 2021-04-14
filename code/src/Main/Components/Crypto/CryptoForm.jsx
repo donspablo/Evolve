@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../form.css";
 
-const StockForm = (props) => {
+const CryptoForm = (props) => {
   const [data, setData] = useState({
     uid: localStorage.getItem("userID"),
     type: "1",
@@ -11,9 +11,9 @@ const StockForm = (props) => {
     quantity: "",
     purchasePrice: "",
     purchaseDate: "",
-  }); //type 1 is to denote to add stock to DB
+  }); //type 1 is to denote to add crypto to DB
   const [error, setError] = useState({ isSet: false, errorDesc: "" });
-  const [text, setText] = useState("Add Stock");
+  const [text, setText] = useState("Add Crypto");
 
   let errorSet = (desc) => {
     setError({ isSet: true, errorDesc: desc });
@@ -68,7 +68,7 @@ const StockForm = (props) => {
 
     setText("Adding...");
 
-    const ADD_ENDPOINT = "http://localhost:80/evolve/addEditDelStock.php";
+    const ADD_ENDPOINT = "http://localhost:80/evolve/addEditDelcrypto.php";
     //console.log(data);
 
     try {
@@ -95,7 +95,8 @@ const StockForm = (props) => {
         errorSet(response.data.error);
       } else if (response.status === 200) {
         console.log(response.data);
-        props.setloading(1, 1);
+        props.setloading(2, 1);
+        // props.overlayhandle(0);
       }
     } catch (e) {
       console.log(e);
@@ -107,8 +108,8 @@ const StockForm = (props) => {
       <div id="box">
         <svg
           id="close"
-          onClick={text === "Add Stock" ? () =>  props.overlayhandle(0) : null}
-          style={{background: text === "Add Stock" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)"}}
+          onClick={text === "Add Crypto" ? () =>  props.overlayhandle(0) : null}
+          style={{background: text === "Add Crypto" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)"}}
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -131,7 +132,7 @@ const StockForm = (props) => {
           />
         </svg>
         <div id="form-holder">
-          <span className="form-title">Add Stock</span>
+          <span className="form-title">Add Crypto</span>
           {/*Vertical line*/}
 
           <div
@@ -198,8 +199,7 @@ const StockForm = (props) => {
                 required
               />
 
-
-              {text === "Add Stock" ? <button type="submit">{text}</button> : <span id="status">Adding...</span>}
+{text === "Add Crypto" ? <button type="submit">{text}</button> : <span id="status">Adding...</span>}
             </form>
           </div>
         </div>
@@ -208,4 +208,4 @@ const StockForm = (props) => {
   );
 };
 
-export default StockForm;
+export default CryptoForm;

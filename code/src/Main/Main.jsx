@@ -20,7 +20,7 @@ const Main = (props) => {
   {
     /*id of the current user*/
   }
-  console.log(localStorage.getItem("userID"));
+  //console.log(localStorage.getItem("userID"));
 
   return (
     <div id="main">

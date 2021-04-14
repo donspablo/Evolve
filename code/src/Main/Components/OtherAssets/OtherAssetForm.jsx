@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../form.css";
 
-const StockForm = (props) => {
+const OtherAssetForm = (props) => {
   const [data, setData] = useState({
     uid: localStorage.getItem("userID"),
     type: "1",
-    symbol: "",
+    assetType: "",
     desc: "",
-    quantity: "",
+    annualReturn: "",
     purchasePrice: "",
     purchaseDate: "",
-  }); //type 1 is to denote to add stock to DB
+  }); //type 1 is to denote to add other asset to DB
   const [error, setError] = useState({ isSet: false, errorDesc: "" });
-  const [text, setText] = useState("Add Stock");
+  const [text, setText] = useState("Add Asset");
 
   let errorSet = (desc) => {
     setError({ isSet: true, errorDesc: desc });
@@ -37,9 +37,9 @@ const StockForm = (props) => {
     setData({
       uid: data.uid,
       type: "1",
-      symbol: type === 1 ? e.target.value.toUpperCase() : data.symbol,
+      assetType: type === 1 ? e.target.value : data.assetType,
       desc: type === 2 ? e.target.value : data.desc,
-      quantity: type === 3 ? e.target.value : data.quantity,
+      annualReturn: type === 3 ? e.target.value : data.annualReturn,
       purchasePrice: type === 4 ? e.target.value : data.purchasePrice,
       purchaseDate: type === 5 ? e.target.value : data.purchaseDate,
     });
@@ -48,14 +48,15 @@ const StockForm = (props) => {
   let handleSubmit = async (e) => {
     e.preventDefault();
 
-    //TO DO - Validate quantity, purchase Price is given as numbers, purchaseDate given in required format
-    var numreg = new RegExp("^[0-9]+$");
-    var decreg = new RegExp("^[0-9]+$|^[0-9]+.[0-9]+$");
+    //TO DO - Validation
 
-    if (!numreg.test(data.quantity)) {
-      errorSet("Please provide number input only for quantity!");
+    var decreg = new RegExp("^[0-9]+$|^[0-9]+.[0-9]+$");
+    var percentreg = /(^100(\.0{1,})?$)|(^([1-9]([0-9])?|1)(\.[0-9]{1,})?$)/;
+
+    if (data.annualReturn.length > 0 && !percentreg.test(data.annualReturn)) {
+      errorSet("Please provide a percentage between 1 and 100 for Expected Annual Return!");
       document.getElementById("form-content").scrollTo(0, 0);
-      Object.assign(data, { quantity: "" });
+      Object.assign(data, { annualReturn: "" });
       return;
     }
 
@@ -66,9 +67,10 @@ const StockForm = (props) => {
       return;
     }
 
+
     setText("Adding...");
 
-    const ADD_ENDPOINT = "http://localhost:80/evolve/addEditDelStock.php";
+    const ADD_ENDPOINT = "http://localhost:80/evolve/addEditDelOtherAsset.php";
     //console.log(data);
 
     try {
@@ -84,9 +86,9 @@ const StockForm = (props) => {
         setData({
           uid: data.uid,
           type: "1",
-          symbol: "",
+          assetType: "",
           desc: "",
-          quantity: "",
+          annualReturn: "",
           purchasePrice: "",
           purchaseDate: "",
         });
@@ -95,7 +97,7 @@ const StockForm = (props) => {
         errorSet(response.data.error);
       } else if (response.status === 200) {
         console.log(response.data);
-        props.setloading(1, 1);
+        props.setloading(4, 1);
       }
     } catch (e) {
       console.log(e);
@@ -107,8 +109,8 @@ const StockForm = (props) => {
       <div id="box">
         <svg
           id="close"
-          onClick={text === "Add Stock" ? () =>  props.overlayhandle(0) : null}
-          style={{background: text === "Add Stock" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)"}}
+          onClick={text === "Add Asset" ? () => props.overlayhandle(0) : null}
+          style={{ background: text === "Add Asset" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)" }}
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -131,7 +133,7 @@ const StockForm = (props) => {
           />
         </svg>
         <div id="form-holder">
-          <span className="form-title">Add Stock</span>
+          <span className="form-title">Add Asset</span>
           {/*Vertical line*/}
 
           <div
@@ -150,10 +152,10 @@ const StockForm = (props) => {
 
               <input
                 type="text"
-                title="Symbol"
-                name="symbol"
-                value={data.symbol}
-                placeholder="Symbol (Required in caps)"
+                title="Asset Type"
+                name="assetType"
+                value={data.assetType}
+                placeholder="Asset Type (Required)"
                 onChange={(e) => changeData(e, 1)}
                 spellCheck="false"
                 required
@@ -170,14 +172,14 @@ const StockForm = (props) => {
 
               <input
                 type="text"
-                title="Quantity"
-                name="quantity"
-                value={data.quantity}
-                placeholder="Quantity (Required)"
+                title="Annual Return"
+                name="annualReturn"
+                value={data.annualReturn}
+                placeholder="Expected Annual Return"
                 onChange={(e) => changeData(e, 3)}
                 spellCheck="false"
-                required
               />
+
               <input
                 type="text"
                 title="Purchase Price"
@@ -198,8 +200,7 @@ const StockForm = (props) => {
                 required
               />
 
-
-              {text === "Add Stock" ? <button type="submit">{text}</button> : <span id="status">Adding...</span>}
+              {text === "Add Asset" ? <button type="submit">{text}</button> : <span id="status">Adding...</span>}
             </form>
           </div>
         </div>
@@ -208,4 +209,4 @@ const StockForm = (props) => {
   );
 };
 
-export default StockForm;
+export default OtherAssetForm;

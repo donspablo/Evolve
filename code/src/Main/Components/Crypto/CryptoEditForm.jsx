@@ -1,19 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import axios from "axios";
 import "../form.css";
 
-const StockForm = (props) => {
+const CryptoEditForm = (props) => {
   const [data, setData] = useState({
-    uid: localStorage.getItem("userID"),
-    type: "1",
-    symbol: "",
-    desc: "",
-    quantity: "",
-    purchasePrice: "",
-    purchaseDate: "",
-  }); //type 1 is to denote to add stock to DB
+    type: "2", //edit Crypto
+    ...props.cryptoData,
+  });
+
   const [error, setError] = useState({ isSet: false, errorDesc: "" });
-  const [text, setText] = useState("Add Stock");
+  const [text, setText] = useState("Edit Crypto");
 
   let errorSet = (desc) => {
     setError({ isSet: true, errorDesc: desc });
@@ -35,8 +31,8 @@ const StockForm = (props) => {
 
   let changeData = (e, type) => {
     setData({
-      uid: data.uid,
-      type: "1",
+      cryptoTransactionID: data.cryptoTransactionID,
+      type: "2", //edit crypto
       symbol: type === 1 ? e.target.value.toUpperCase() : data.symbol,
       desc: type === 2 ? e.target.value : data.desc,
       quantity: type === 3 ? e.target.value : data.quantity,
@@ -66,13 +62,13 @@ const StockForm = (props) => {
       return;
     }
 
-    setText("Adding...");
+    setText("Editing...");
 
-    const ADD_ENDPOINT = "http://localhost:80/evolve/addEditDelStock.php";
+    const EDIT_ENDPOINT = "http://localhost:80/evolve/addEditDelcrypto.php";
     //console.log(data);
 
     try {
-      let response = await axios.post(ADD_ENDPOINT, data);
+      let response = await axios.post(EDIT_ENDPOINT, data);
       //console.log(response);
 
       //there is an error
@@ -82,20 +78,16 @@ const StockForm = (props) => {
 
         //resetting the form
         setData({
-          uid: data.uid,
-          type: "1",
-          symbol: "",
-          desc: "",
-          quantity: "",
-          purchasePrice: "",
-          purchaseDate: "",
+          type: "2", //edit crypto
+          ...props.cryptoData,
         });
 
         //setting the error
         errorSet(response.data.error);
       } else if (response.status === 200) {
         console.log(response.data);
-        props.setloading(1, 1);
+        props.setloading(2, 1);
+        // props.overlayhandle(0);
       }
     } catch (e) {
       console.log(e);
@@ -107,8 +99,8 @@ const StockForm = (props) => {
       <div id="box">
         <svg
           id="close"
-          onClick={text === "Add Stock" ? () =>  props.overlayhandle(0) : null}
-          style={{background: text === "Add Stock" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)"}}
+          onClick={text === "Edit Crypto" ? () => props.overlayhandle(0) : null}
+          style={{ background: text === "Edit Crypto" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)" }}
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -131,7 +123,7 @@ const StockForm = (props) => {
           />
         </svg>
         <div id="form-holder">
-          <span className="form-title">Add Stock</span>
+          <span className="form-title">Edit Crypto</span>
           {/*Vertical line*/}
 
           <div
@@ -198,8 +190,7 @@ const StockForm = (props) => {
                 required
               />
 
-
-              {text === "Add Stock" ? <button type="submit">{text}</button> : <span id="status">Adding...</span>}
+              {text === "Edit Crypto" ? <button type="submit">{text}</button> : <span id="status">Editing...</span>}
             </form>
           </div>
         </div>
@@ -208,4 +199,4 @@ const StockForm = (props) => {
   );
 };
 
-export default StockForm;
+export default CryptoEditForm;
