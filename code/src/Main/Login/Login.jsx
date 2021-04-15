@@ -47,6 +47,7 @@ const Login = (props) => {
 
         //setting the error
         errorSet(response.data.error);
+        return;
       } else if (response.status === 200 && response.data.userData.token) {
         let jwt = response.data.userData.token;
         let uid = response.data.userData.uid;
@@ -60,6 +61,7 @@ const Login = (props) => {
         props.login();
       }
     } catch (e) {
+      errorSet("Some error occured!");
       console.log(e);
     }
   };
@@ -91,7 +93,7 @@ const Login = (props) => {
             title="Email"
             name="email"
             value={data.email}
-            placeholder="Email"
+            placeholder="Email (Required)"
             onChange={(e) => changeData(e, 1)}
             spellCheck="false"
             required
@@ -101,7 +103,7 @@ const Login = (props) => {
             title="Password"
             name="password"
             value={data.password}
-            placeholder="Password"
+            placeholder="Password (Required)"
             onChange={(e) => changeData(e, 2)}
             required
           />

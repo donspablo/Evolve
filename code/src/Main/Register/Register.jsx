@@ -62,6 +62,7 @@ const Register = (props) => {
 
         //setting the error
         errorSet(response.data.error);
+        return;
       } else if (response.status === 200 && response.data.userData.token) {
         console.log("Token:" + response.data.userData.token);
 
@@ -77,6 +78,7 @@ const Register = (props) => {
         props.login();
       }
     } catch (e) {
+      errorSet("Some error occured!");
       console.log(e);
     }
   };
