@@ -25,9 +25,7 @@ const Home = (props) => {
             opacity: "0",
             margin: "auto",
             marginLeft: "0",
-            marginRight: "10px",
-            animation:
-              "icon-opacity-change 0.75s 0.1s cubic-bezier(.18,.87,.92,1) forwards",
+            marginRight: "10px"
           }}
         />
         <div id="evolve">EVOLVE</div>
@@ -38,22 +36,20 @@ const Home = (props) => {
       <div id="home-content">
         <div id="c-box">
           <div id="inside-box">
-            <p>Unable to afford a portfolio manager to maintain your investments? Check out Evolve - the only online investment portfolio manager that you'll ever need.</p>
+            <p>Unable to afford a portfolio manager to maintain your investments? <br></br>Welcome to Evolve - the only online investment portfolio manager that you'll ever need.</p>
             <Link to="/register" id="reg-but">Become an Evolve member!</Link>
           </div>
         </div>
         <div id="right-img-holder">
-        <img
-          src={logo}
-          id="right-img"
-          style={{
-            opacity: "0",
-            margin: "auto",
-            marginLeft: "0",
-            animation:
-              "icon-opacity-change 0.75s 0.1s cubic-bezier(.18,.87,.92,1) forwards",
-          }}
-        />
+          <img
+            src={logo}
+            id="right-img"
+            style={{
+              opacity: "0",
+              margin: "auto",
+              marginLeft: "0"
+            }}
+          />
         </div>
       </div>
       <div id="home-footer">

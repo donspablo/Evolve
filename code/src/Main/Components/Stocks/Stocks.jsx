@@ -79,6 +79,9 @@ const Stocks = (props) => {
     props.setPurchasePrice(1, findTotalPurchasePrice());
   }, [props.isDataLoaded])
 
+  let currentdata = ["132.03", "732.23", "3333.00"];
+  let totalcp = 0;
+
   return (
     <>
       {deleteOverlay !== -1 && (
@@ -106,6 +109,18 @@ const Stocks = (props) => {
             <tbody>
               {
                 stockData.map((stock, index) => {
+
+                  const gainloss = (parseFloat(currentdata[index])*stock.quantity - parseFloat(stock.purchase_price)*stock.quantity).toFixed(2);
+                  let glmain = null;
+
+                  if(gainloss < 0){
+                    glmain = "-$" + (-1 * gainloss) 
+                  }else{
+                    glmain = "$" + gainloss;
+                  }
+
+                  totalcp += parseFloat(currentdata[index])*stock.quantity;
+
                   return (
                     <tr
                       className="data"
@@ -117,8 +132,8 @@ const Stocks = (props) => {
                       <td>{convertDateFormat(stock.purchase_date)}</td>
                       <td>{stock.quantity}</td>
                       <td>{"$" + stock.purchase_price}</td>
-                      <td>current price</td>
-                      <td>calculate</td>
+                      <td>{"$" + currentdata[index]}</td>
+                      <td>{glmain}</td>
                     </tr>
                   );
                 })}
@@ -130,8 +145,8 @@ const Stocks = (props) => {
                 <td></td>
                 <td></td>
                 <td>{"$" + findTotalPurchasePrice()}</td>
-                <td>total currentPrice</td>
-                <td>total gain/loss</td>
+                <td>{"$" + totalcp.toFixed(2)}</td>
+                <td></td>
               </tr>
 
             </tbody>

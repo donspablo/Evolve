@@ -19,9 +19,9 @@ const AssetBox = (props) => {
         <span className="label">Purchase Value</span>
         <span className="value">{props.isDataLoaded === 0 ? "$" + purprice : "Loading..."}</span>
       </div>
-      <div id="right" style={{ borderLeft: "1px solid white", paddingLeft: "25px" }}>
-        <span className="label">Return</span>
-        <span className="value">{"P" + "%"}</span>
+      <div id="right" style={{ marginLeft:"25px", borderLeft: "1px solid white", paddingLeft: "25px" }}>
+        <span className="label">Average Return</span>
+        <span className="value">{"-2.52" + "%"}</span>
       </div>
     </div>
   );

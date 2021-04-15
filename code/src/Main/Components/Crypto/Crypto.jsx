@@ -113,8 +113,8 @@ const Crypto = (props) => {
                       <td>{convertDateFormat(crypto.purchase_date)}</td>
                       <td>{crypto.quantity}</td>
                       <td>{"$" + crypto.purchase_price}</td>
-                      <td>current price</td>
-                      <td>calculate</td>
+                      <td>{"$62668.40"}</td>
+                      <td>{"-$919.8"}</td>
                     </tr>
                   );
                 })}
@@ -126,8 +126,8 @@ const Crypto = (props) => {
                 <td></td>
                 <td></td>
                 <td>{"$" + findTotalPurchasePrice()}</td>
-                <td>total currentPrice</td>
-                <td>total gain/loss</td>
+                <td>{"$62668.40"}</td>
+                <td></td>
               </tr>
 
             </tbody>

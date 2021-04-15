@@ -8,7 +8,7 @@ const TopBar = (props) => {
     return(
         <div id="topbar">
             Welcome {localStorage.getItem("username")}
-            <img id="dp" onClick={() => props.logout()} src="https://thisisindrajit.github.io/portfolio/static/media/logo.d701fbb4.png" alt="Display Picture" />
+            <img id="dp" onClick={() => props.logout()} src="https://pics.freeicons.io/uploads/icons/png/7947586491595453760-512.png" alt="Display Picture" />
         </div>
     )
 }

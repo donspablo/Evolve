@@ -78,7 +78,7 @@ const Register = (props) => {
         props.login();
       }
     } catch (e) {
-      errorSet("Some error occured!");
+      errorSet("Some error occured while registering!");
       console.log(e);
     }
   };

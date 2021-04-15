@@ -61,7 +61,7 @@ const Login = (props) => {
         props.login();
       }
     } catch (e) {
-      errorSet("Some error occured!");
+      errorSet("Some error occured while logging in!");
       console.log(e);
     }
   };

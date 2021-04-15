@@ -98,7 +98,7 @@ const Bonds = (props) => {
                 <th>Coupon Rate</th>
                 <th>Years to Maturity</th>
                 <th>Payment Interval</th>
-                <th>Current Bond Price</th>
+                <th>Total Interest paid until now</th>
               </tr>
             </thead>
             <tbody>
@@ -117,7 +117,7 @@ const Bonds = (props) => {
                       <td>{bond.coupon_rate + "%"}</td>
                       <td>{bond.years_to_maturity}</td>
                       <td>{bond.payment_interval}</td>
-                      <td>current price</td>
+                      <td>{"$80"}</td>
                     </tr>
                   );
                 })}
@@ -131,7 +131,7 @@ const Bonds = (props) => {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>total currentPrice</td>
+                <td>{"$80"}</td>
               </tr>
 
             </tbody>

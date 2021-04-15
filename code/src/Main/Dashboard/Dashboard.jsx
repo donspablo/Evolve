@@ -345,11 +345,9 @@ const Dashboard = (props) => {
           </div>
         </div>
 
-        <div className="label-grid">
+        {/* <div className="label-grid">
           <div className="label-dashboard">Asset Types</div>
         </div>
-
-        {/*Vertical line*/}
 
         <div
           style={{
@@ -370,7 +368,7 @@ const Dashboard = (props) => {
               />
             );
           })}
-        </div>
+        </div> */}
 
         <div className="label-grid">
           <div className="label-dashboard">My Stocks</div>
