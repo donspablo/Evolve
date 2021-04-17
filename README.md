@@ -5,12 +5,14 @@ Investing is important, if not critical, to make your money work for you. You wo
 
 **Evolve - the only online investment portfolio manager that you’ll ever need.**
 
+
 ## Tech Stack:
 
 - ReactJS (frontend)
 - Snowpack (module bundler)
 - PHP (backend)
 - MySQL (database)
+
 
 ## Site screenshots
 ### Home
@@ -34,6 +36,7 @@ Investing is important, if not critical, to make your money work for you. You wo
 Note - All data available in My Stocks, My Crypto, My Bonds and Other Assets tables in the dashboard are just dummy values and are not real.
 
 *Charts and financial information provided by TradingView, a popular charting & trading platform.*
+
 
 ## References:
 
