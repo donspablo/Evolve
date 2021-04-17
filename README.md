@@ -40,4 +40,6 @@ Note - All data available in My Stocks, My Crypto, My Bonds and Other Assets tab
 
 ## References:
 
-- https://www.snowpack.dev/tutorials/react
+- Snowpack documentation - https://www.snowpack.dev/tutorials/react
+- React Hooks documentation - https://reactjs.org/docs/hooks-intro.html
+- TradingView widgets - https://www.tradingview.com/widget/
