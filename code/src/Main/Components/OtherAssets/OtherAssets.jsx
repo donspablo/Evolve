@@ -28,6 +28,12 @@ const OtherAssets = (props) => {
     return date[2] + "/" + date[1] + "/" + date[0];
   };
 
+  let starttoLoad = () => {
+    props.setloading(4, 1);
+    fetchotherAssetData();
+  }
+
+
   let fetchotherAssetData = async () => {
 
     const data = {
@@ -51,6 +57,7 @@ const OtherAssets = (props) => {
         }
 
         props.setloading(4, 0);
+
         setDeleteOverlay(-1); //for closing the delete overlay on deleting other asset
 
         if (props.currentOpenOverlay === 7 || props.currentOpenOverlay === 8) {
@@ -88,7 +95,7 @@ const OtherAssets = (props) => {
           otherAssettid={deleteOverlay} //this variable stores the transaction id of the otherAsset to be deleted
           setOverlay={setDeleteOverlay}
           height={document.getElementById("other-assets").clientHeight}
-          startLoadingAgain={props.setloading}
+          startLoadingAgain={starttoLoad}
         />
       )}
       {otherAssetData.length > 0 ?
@@ -115,7 +122,7 @@ const OtherAssets = (props) => {
                       <td>{otherAsset.asset_type}</td>
                       <td title={otherAsset.asset_description}>{otherAsset.asset_description}</td>
                       <td>{convertDateFormat(otherAsset.purchase_date)}</td>
-                      <td>{"$" + otherAsset.purchase_price}</td>
+                      <td>{"₹" + otherAsset.purchase_price}</td>
                       <td>{otherAsset.annual_return === "0.00" ? "-" : otherAsset.annual_return + "%"}</td>
                     </tr>
                   );
@@ -126,7 +133,7 @@ const OtherAssets = (props) => {
                 <td></td>
                 <td>TOTAL</td>
                 <td></td>
-                <td>{"$" + findTotalPurchasePrice()}</td>
+                <td>{"₹" + findTotalPurchasePrice()}</td>
                 <td></td>
               </tr>
 

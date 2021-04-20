@@ -23,6 +23,16 @@ class AssetGraph extends Component {
         dataLabels: {
           enabled: false
         },
+        fill: {
+          type: 'gradient',
+        },
+        tooltip:{
+          y: {
+            formatter: function(value) {
+              return "₹" + value;
+            }
+          }
+        },
         legend: {
           show: true,
           showForSingleSeries: false,

@@ -21,7 +21,8 @@ const CryptoDeleteOverlay = (props) => {
             let response = await axios.post(DELETE_ENDPOINT, data);
 
             if (response.status === 200 && !isunmounted) {
-                props.startLoadingAgain(2,1);
+                console.log(response.data);
+                props.startLoadingAgain(2, 1);
             } else {
                 console.log(response.data.error);
             }

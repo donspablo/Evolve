@@ -21,6 +21,7 @@ const StockDeleteOverlay = (props) => {
             if (response.status === 200 && !isunmounted) {
                 console.log(response.data);
                 props.startLoadingAgain(1, 1);
+
             } else {
                 console.log(response.data.error);
             }

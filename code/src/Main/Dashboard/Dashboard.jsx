@@ -18,7 +18,7 @@ import OtherAssetForm from "../Components/OtherAssets/OtherAssetForm";
 import OtherAssetEditForm from '../Components/OtherAssets/OtherAssetEditForm';
 import Overlay from "../Components/Overlay/Overlay";
 
-const Dashboard = (props) => {
+const Dashboard = () => {
   let assetTypes = ["Stocks", "Crypto", "Bonds", "Others"];
   //use state to store current asset value and current purchase value of all Assets
   let [assetPurchasePrice, setassetPurchasePrice] = useState([0, 0, 0, 0]); //1 - stock, 2 - crypto, 3 - bonds, 4 - others
@@ -30,18 +30,17 @@ const Dashboard = (props) => {
   //edit form data
   let [editFormData, setEditFormData] = useState({});
 
-  let setassetPurchasePriceByType = async (type, newprice) => {
+  let setassetPurchasePriceByType = (type, newprice) => {
     let newassetPurchasePrice = assetPurchasePrice;
     newassetPurchasePrice[type - 1] = parseFloat(newprice);
 
-    await setassetPurchasePrice([...newassetPurchasePrice]); //to update array in useState, use this syntax
+    setassetPurchasePrice([...newassetPurchasePrice]); //to update array in useState, use this syntax
   };
 
-  let setloadingDataByType = async (type, status) => {
+  let setloadingDataByType = (type, status) => {
     let newloading = loadingData;
     newloading[type - 1] = status;
-
-    await setloadingData([...newloading]); //to update array in useState, use this syntax
+    setloadingData([...newloading]); //to update array in useState, use this syntax
   };
 
   let assettypeboxhandler = (type) => {
@@ -63,7 +62,7 @@ const Dashboard = (props) => {
   const marketobj = {
     "colorTheme": "dark",
     "dateRange": "12M",
-    "exchange": "US",
+    "exchange": "BSE",
     "showChart": true,
     "locale": "en",
     "largeChartUrl": "",
@@ -76,7 +75,7 @@ const Dashboard = (props) => {
     "gridLineColor": "#9F9BCA",
     "scaleFontColor": "#9F9BCA",
     "belowLineFillColorGrowing": "#302b63",
-    "belowLineFillColorFalling": "#fff",
+    "belowLineFillColorFalling": "#302b63",
     "symbolActiveColor": "#4B4591"
   }
 
@@ -95,12 +94,16 @@ const Dashboard = (props) => {
     "gridLineColor": "#428899",
     "scaleFontColor": "#428899",
     "belowLineFillColorGrowing": "#89C8D7",
-    "belowLineFillColorFalling": "#66A4B3",
+    "belowLineFillColorFalling": "#89C8D7",
     "symbolActiveColor": "#CDE7EE",
     "tabs": [
       {
         "title": "Indices",
         "symbols": [
+          {
+            "s": "BSE:SENSEX",
+            "d": "SENSEX"
+          },
           {
             "s": "FOREXCOM:SPXUSD",
             "d": "S&P 500"
@@ -113,10 +116,6 @@ const Dashboard = (props) => {
             "s": "FOREXCOM:DJI",
             "d": "Dow 30"
           },
-          {
-            "s": "BSE:SENSEX",
-            "d": "SENSEX"
-          }
         ],
         "originalTitle": "Indices"
       },
@@ -345,10 +344,11 @@ const Dashboard = (props) => {
           </div>
         </div>
 
-        {/* <div className="label-grid">
+        <div className="label-grid">
           <div className="label-dashboard">Asset Types</div>
         </div>
 
+        {/*Vertical line*/}
         <div
           style={{
             height: "0.5px",
@@ -368,7 +368,7 @@ const Dashboard = (props) => {
               />
             );
           })}
-        </div> */}
+        </div>
 
         <div className="label-grid">
           <div className="label-dashboard">My Stocks</div>

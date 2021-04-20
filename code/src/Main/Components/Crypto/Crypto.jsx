@@ -28,6 +28,12 @@ const Crypto = (props) => {
     return date[2] + "/" + date[1] + "/" + date[0];
   };
 
+  let starttoLoad = () => {
+    props.setloading(2, 1);
+    fetchcryptoData();
+  }
+
+
   let fetchcryptoData = async () => {
     const data = {
       uid: localStorage.getItem("userID"),
@@ -46,7 +52,9 @@ const Crypto = (props) => {
         } else {
           setcryptoData([]) //resetting Crypto to none
         }
+        
         props.setloading(2, 0);
+
         setDeleteOverlay(-1); //for closing the delete overlay on deleting crypto
         if (props.currentOpenOverlay === 3 || props.currentOpenOverlay === 4) {
           props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing crypto
@@ -82,7 +90,7 @@ const Crypto = (props) => {
           cryptotid={deleteOverlay} //this variable stores the transaction id of the crypto to be deleted
           setOverlay={setDeleteOverlay}
           height={document.getElementById("crypto").clientHeight}
-          startLoadingAgain={props.setloading}
+          startLoadingAgain={starttoLoad}
         />
       )}
       {cryptoData.length > 0 ?
@@ -112,9 +120,9 @@ const Crypto = (props) => {
                       <td title={crypto.crypto_description}>{crypto.crypto_description}</td>
                       <td>{convertDateFormat(crypto.purchase_date)}</td>
                       <td>{crypto.quantity}</td>
-                      <td>{"$" + crypto.purchase_price}</td>
-                      <td>{"$62668.40"}</td>
-                      <td>{"-$919.8"}</td>
+                      <td>{"₹" + crypto.purchase_price}</td>
+                      <td>{"₹62668.40"}</td>
+                      <td>{"-₹919.8"}</td>
                     </tr>
                   );
                 })}
@@ -125,8 +133,8 @@ const Crypto = (props) => {
                 <td>TOTAL</td>
                 <td></td>
                 <td></td>
-                <td>{"$" + findTotalPurchasePrice()}</td>
-                <td>{"$62668.40"}</td>
+                <td>{"₹" + findTotalPurchasePrice()}</td>
+                <td>{"₹62668.40"}</td>
                 <td></td>
               </tr>
 

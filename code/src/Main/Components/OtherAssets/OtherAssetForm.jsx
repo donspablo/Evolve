@@ -185,7 +185,7 @@ const OtherAssetForm = (props) => {
                 title="Purchase Price"
                 name="purchasePrice"
                 value={data.purchasePrice}
-                placeholder="Purchase Price in $ (Required)"
+                placeholder="Purchase Price in ₹ (Required)"
                 onChange={(e) => changeData(e, 4)}
                 required
               />

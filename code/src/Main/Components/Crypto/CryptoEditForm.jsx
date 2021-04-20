@@ -33,7 +33,7 @@ const CryptoEditForm = (props) => {
     setData({
       cryptoTransactionID: data.cryptoTransactionID,
       type: "2", //edit crypto
-      symbol: type === 1 ? e.target.value.toUpperCase() : data.symbol,
+      symbol: type === 1 ? e.target.value : data.symbol,
       desc: type === 2 ? e.target.value : data.desc,
       quantity: type === 3 ? e.target.value : data.quantity,
       purchasePrice: type === 4 ? e.target.value : data.purchasePrice,
@@ -68,7 +68,7 @@ const CryptoEditForm = (props) => {
     //console.log(data);
 
     try {
-      let response = await axios.post(EDIT_ENDPOINT, data);
+      let response = await axios.post(EDIT_ENDPOINT, Object.assign(data, {symbol:data.symbol.toUpperCase()}));
       //console.log(response);
 
       //there is an error
@@ -145,7 +145,7 @@ const CryptoEditForm = (props) => {
                 title="Symbol"
                 name="symbol"
                 value={data.symbol}
-                placeholder="Symbol (Required in caps)"
+                placeholder="Ticker Symbol (Required in caps)"
                 onChange={(e) => changeData(e, 1)}
                 spellCheck="false"
                 required
@@ -175,7 +175,7 @@ const CryptoEditForm = (props) => {
                 title="Purchase Price"
                 name="purchasePrice"
                 value={data.purchasePrice}
-                placeholder="Purchase Price in $ (Required)"
+                placeholder="Purchase Price in ₹ (Required)"
                 onChange={(e) => changeData(e, 4)}
                 required
               />

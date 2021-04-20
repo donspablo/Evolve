@@ -28,6 +28,12 @@ const Bonds = (props) => {
     return date[2] + "/" + date[1] + "/" + date[0];
   };
 
+  let starttoLoad = () => {
+    props.setloading(3, 1);
+    fetchBondData();
+  }
+
+
   let fetchBondData = async () => {
 
     const data = {
@@ -49,6 +55,7 @@ const Bonds = (props) => {
         }
 
         props.setloading(3, 0);
+
         setDeleteOverlay(-1); //for closing the delete overlay on deleting bond
         if (props.currentOpenOverlay === 5 || props.currentOpenOverlay === 6) {
           props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing bond
@@ -83,7 +90,7 @@ const Bonds = (props) => {
           bondtid={deleteOverlay} //this variable stores the transaction id of the bond to be deleted
           setOverlay={setDeleteOverlay}
           height={document.getElementById("bonds").clientHeight}
-          startLoadingAgain={props.setloading}
+          startLoadingAgain={starttoLoad}
         />
       )}
       {bondData.length > 0 ?
@@ -113,11 +120,11 @@ const Bonds = (props) => {
                       <td>{bond.bond_type}</td>
                       <td title={bond.bond_description}>{bond.bond_description}</td>
                       <td>{convertDateFormat(bond.purchase_date)}</td>
-                      <td>{"$" + bond.face_value}</td>
+                      <td>{"₹" + bond.face_value}</td>
                       <td>{bond.coupon_rate + "%"}</td>
                       <td>{bond.years_to_maturity}</td>
                       <td>{bond.payment_interval}</td>
-                      <td>{"$80"}</td>
+                      <td>{"₹80"}</td>
                     </tr>
                   );
                 })}
@@ -127,11 +134,11 @@ const Bonds = (props) => {
                 <td></td>
                 <td>TOTAL</td>
                 <td></td>
-                <td>{"$" + findTotalFaceValue()}</td>
+                <td>{"₹" + findTotalFaceValue()}</td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{"$80"}</td>
+                <td>{"₹80"}</td>
               </tr>
 
             </tbody>

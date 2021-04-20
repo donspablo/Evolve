@@ -176,7 +176,7 @@ const BondEditForm = (props) => {
                 title="Face Value"
                 name="faceValue"
                 value={data.faceValue}
-                placeholder="Face Value (Required)"
+                placeholder="Face Value in ₹ (Required)"
                 onChange={(e) => changeData(e, 3)}
                 required
               />

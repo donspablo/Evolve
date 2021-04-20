@@ -37,7 +37,7 @@ const StockForm = (props) => {
     setData({
       uid: data.uid,
       type: "1",
-      symbol: type === 1 ? e.target.value.toUpperCase() : data.symbol,
+      symbol: type === 1 ? e.target.value : data.symbol,
       desc: type === 2 ? e.target.value : data.desc,
       quantity: type === 3 ? e.target.value : data.quantity,
       purchasePrice: type === 4 ? e.target.value : data.purchasePrice,
@@ -72,7 +72,7 @@ const StockForm = (props) => {
     //console.log(data);
 
     try {
-      let response = await axios.post(ADD_ENDPOINT, data);
+      let response = await axios.post(ADD_ENDPOINT, Object.assign(data, { symbol: data.symbol.toUpperCase() }));
       //console.log(response);
 
       //there is an error
@@ -107,8 +107,8 @@ const StockForm = (props) => {
       <div id="box">
         <svg
           id="close"
-          onClick={text === "Add Stock" ? () =>  props.overlayhandle(0) : null}
-          style={{background: text === "Add Stock" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)"}}
+          onClick={text === "Add Stock" ? () => props.overlayhandle(0) : null}
+          style={{ background: text === "Add Stock" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)" }}
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -153,7 +153,7 @@ const StockForm = (props) => {
                 title="Symbol"
                 name="symbol"
                 value={data.symbol}
-                placeholder="Symbol (Required in caps)"
+                placeholder="Ticker Symbol (Required in caps)"
                 onChange={(e) => changeData(e, 1)}
                 spellCheck="false"
                 required
@@ -183,7 +183,7 @@ const StockForm = (props) => {
                 title="Purchase Price"
                 name="purchasePrice"
                 value={data.purchasePrice}
-                placeholder="Purchase Price in $ (Required)"
+                placeholder="Purchase Price in ₹ (Required)"
                 onChange={(e) => changeData(e, 4)}
                 required
               />

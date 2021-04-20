@@ -37,7 +37,7 @@ const CryptoForm = (props) => {
     setData({
       uid: data.uid,
       type: "1",
-      symbol: type === 1 ? e.target.value.toUpperCase() : data.symbol,
+      symbol: type === 1 ? e.target.value : data.symbol,
       desc: type === 2 ? e.target.value : data.desc,
       quantity: type === 3 ? e.target.value : data.quantity,
       purchasePrice: type === 4 ? e.target.value : data.purchasePrice,
@@ -72,7 +72,7 @@ const CryptoForm = (props) => {
     //console.log(data);
 
     try {
-      let response = await axios.post(ADD_ENDPOINT, data);
+      let response = await axios.post(ADD_ENDPOINT, Object.assign(data, {symbol:data.symbol.toUpperCase()}));
       //console.log(response);
 
       //there is an error
@@ -154,7 +154,7 @@ const CryptoForm = (props) => {
                 title="Symbol"
                 name="symbol"
                 value={data.symbol}
-                placeholder="Symbol (Required in caps)"
+                placeholder="Ticker Symbol (Required in caps)"
                 onChange={(e) => changeData(e, 1)}
                 spellCheck="false"
                 required
@@ -184,7 +184,7 @@ const CryptoForm = (props) => {
                 title="Purchase Price"
                 name="purchasePrice"
                 value={data.purchasePrice}
-                placeholder="Purchase Price in $ (Required)"
+                placeholder="Purchase Price in ₹ (Required)"
                 onChange={(e) => changeData(e, 4)}
                 required
               />

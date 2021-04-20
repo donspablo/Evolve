@@ -27,6 +27,11 @@ const Stocks = (props) => {
     return date[2] + "/" + date[1] + "/" + date[0];
   };
 
+  let starttoLoad = () => {
+    props.setloading(1, 1);
+    fetchStockData();
+  }
+
   let fetchStockData = async () => {
 
     const data = {
@@ -89,7 +94,7 @@ const Stocks = (props) => {
           stocktid={deleteOverlay} //this variable stores the transaction id of the stock to be deleted
           setOverlay={setDeleteOverlay}
           height={document.getElementById("stocks").clientHeight}
-          startLoadingAgain={props.setloading}
+          startLoadingAgain={starttoLoad}
         />
       )}
       {stockData.length > 0 ?
@@ -114,9 +119,9 @@ const Stocks = (props) => {
                   let glmain = null;
 
                   if(gainloss < 0){
-                    glmain = "-$" + (-1 * gainloss) 
+                    glmain = "-₹" + (-1 * gainloss) 
                   }else{
-                    glmain = "$" + gainloss;
+                    glmain = "₹" + gainloss;
                   }
 
                   totalcp += parseFloat(currentdata[index])*stock.quantity;
@@ -131,8 +136,8 @@ const Stocks = (props) => {
                       <td title={stock.stock_description}>{stock.stock_description}</td>
                       <td>{convertDateFormat(stock.purchase_date)}</td>
                       <td>{stock.quantity}</td>
-                      <td>{"$" + stock.purchase_price}</td>
-                      <td>{"$" + currentdata[index]}</td>
+                      <td>{"₹" + stock.purchase_price}</td>
+                      <td>{"₹" + currentdata[index]}</td>
                       <td>{glmain}</td>
                     </tr>
                   );
@@ -144,8 +149,8 @@ const Stocks = (props) => {
                 <td>TOTAL</td>
                 <td></td>
                 <td></td>
-                <td>{"$" + findTotalPurchasePrice()}</td>
-                <td>{"$" + totalcp.toFixed(2)}</td>
+                <td>{"₹" + findTotalPurchasePrice()}</td>
+                <td>{"₹" + totalcp.toFixed(2)}</td>
                 <td></td>
               </tr>
 
