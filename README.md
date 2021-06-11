@@ -9,6 +9,7 @@ Investing is important, if not critical, to make your money work for you. You wo
 ## Tech Stack:
 
 - ReactJS (frontend)
+- Redux (State Management)
 - Snowpack (module bundler)
 - PHP (backend)
 - MySQL (database)
