@@ -17,31 +17,33 @@ import OtherAssets from "../Components/OtherAssets/OtherAssets";
 import OtherAssetForm from "../Components/OtherAssets/OtherAssetForm";
 import OtherAssetEditForm from '../Components/OtherAssets/OtherAssetEditForm';
 import Overlay from "../Components/Overlay/Overlay";
+import { connect } from 'react-redux';
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   let assetTypes = ["Stocks", "Crypto", "Bonds", "Others"];
   //use state to store current asset value and current purchase value of all Assets
-  let [assetPurchasePrice, setassetPurchasePrice] = useState([0, 0, 0, 0]); //1 - stock, 2 - crypto, 3 - bonds, 4 - others
-  let [assetCurrentPrice, setassetCurrentPrice] = useState([0, 0, 0, 0]);
+  // let [assetPurchasePrice, setassetPurchasePrice] = useState([0, 0, 0, 0]); //1 - stock, 2 - crypto, 3 - bonds, 4 - others
+  // let [assetCurrentPrice, setassetCurrentPrice] = useState([0, 0, 0, 0]);
   //loading status for assets
-  let [loadingData, setloadingData] = useState([1, 1, 1, 1])
+  // let [loadingData, setloadingData] = useState([1, 1, 1, 1])
   //overlay
   let [overlay, setOverlayType] = useState(0); //0 - not open, 1 - add stock, 2 - edit stock, 3 - add crypto, 4 - edit crypto, 5 - add bond, 6 - edit bond
+
   //edit form data
   let [editFormData, setEditFormData] = useState({});
 
-  let setassetPurchasePriceByType = (type, newprice) => {
-    let newassetPurchasePrice = assetPurchasePrice;
-    newassetPurchasePrice[type - 1] = parseFloat(newprice);
+  // let setassetPurchasePriceByType = (type, newprice) => {
+  //   let newassetPurchasePrice = assetPurchasePrice;
+  //   newassetPurchasePrice[type - 1] = parseFloat(newprice);
 
-    setassetPurchasePrice([...newassetPurchasePrice]); //to update array in useState, use this syntax
-  };
+  //   setassetPurchasePrice([...newassetPurchasePrice]); //to update array in useState, use this syntax
+  // };
 
-  let setloadingDataByType = (type, status) => {
-    let newloading = loadingData;
-    newloading[type - 1] = status;
-    setloadingData([...newloading]); //to update array in useState, use this syntax
-  };
+  // let setloadingDataByType = (type, status) => {
+  //   let newloading = loadingData;
+  //   newloading[type - 1] = status;
+  //   setloadingData([...newloading]); //to update array in useState, use this syntax
+  // };
 
   let assettypeboxhandler = (type) => {
     console.log("Clicked " + type);
@@ -231,7 +233,7 @@ const Dashboard = () => {
             <StockForm
               border="1px solid #da77d6"
               overlayhandle={openOverlay}
-              setloading={setloadingDataByType}
+            //setloading={setloadingDataByType}
             />
           )}
 
@@ -241,7 +243,7 @@ const Dashboard = () => {
               border="1px solid #da77d6"
               overlayhandle={openOverlay}
               stockData={editFormData}
-              setloading={setloadingDataByType}
+            //setloading={setloadingDataByType}
             />
           )}
 
@@ -250,7 +252,7 @@ const Dashboard = () => {
             <CryptoForm
               border="1px solid #70A3E0"
               overlayhandle={openOverlay}
-              setloading={setloadingDataByType}
+            //setloading={setloadingDataByType}
             />
           )}
 
@@ -260,7 +262,7 @@ const Dashboard = () => {
               border="1px solid #70A3E0"
               overlayhandle={openOverlay}
               cryptoData={editFormData}
-              setloading={setloadingDataByType}
+            //setloading={setloadingDataByType}
             />
           )}
 
@@ -269,7 +271,7 @@ const Dashboard = () => {
             <BondForm
               border="1px solid #D96587"
               overlayhandle={openOverlay}
-              setloading={setloadingDataByType}
+            //setloading={setloadingDataByType}
             />
           )}
 
@@ -279,7 +281,7 @@ const Dashboard = () => {
               border="1px solid #D96587"
               overlayhandle={openOverlay}
               bondData={editFormData}
-              setloading={setloadingDataByType}
+            //setloading={setloadingDataByType}
             />
           )}
 
@@ -289,7 +291,7 @@ const Dashboard = () => {
               border="1px solid #2C5364"
               overlayhandle={openOverlay}
               bondData={editFormData}
-              setloading={setloadingDataByType}
+            //setloading={setloadingDataByType}
             />
           )}
 
@@ -300,7 +302,7 @@ const Dashboard = () => {
               border="1px solid #2C5364"
               overlayhandle={openOverlay}
               otherAssetData={editFormData}
-              setloading={setloadingDataByType}
+            //setloading={setloadingDataByType}
             />
           )}
         </Overlay>
@@ -311,9 +313,9 @@ const Dashboard = () => {
           <div className="left-grid">
             <AssetBox
               //sending purchase price and current price for various assets
-              purchasePrice={assetPurchasePrice}
-              currentPrice={assetCurrentPrice}
-              isDataLoaded={loadingData.reduce((a, b) => a + b)}
+              // purchasePrice={assetPurchasePrice}
+              // currentPrice={assetCurrentPrice}
+              // isDataLoaded={loadingData.reduce((a, b) => a + b)}
               gradient={{
                 background:
                   "linear-gradient(129.95deg, #F82C8E 0.74%, #A90C61 100%)",
@@ -328,9 +330,9 @@ const Dashboard = () => {
           <div className="right-grid">
             <AssetGraph
               //sending purchase price and current price for various assets
-              isDataLoaded={loadingData.reduce((a, b) => a + b)}
-              purchasePrice={assetPurchasePrice}
-              currentPrice={assetCurrentPrice}
+              //isDataLoaded={loadingData.reduce((a, b) => a + b)}
+              // purchasePrice={assetPurchasePrice}
+              // currentPrice={assetCurrentPrice}
               gradient={{
                 background:
                   "linear-gradient(129.95deg, #404D58 0.74%, #5D7489 100%)",
@@ -372,7 +374,7 @@ const Dashboard = () => {
 
         <div className="label-grid">
           <div className="label-dashboard">My Stocks</div>
-          {loadingData[0] === 0 && <div className="label-icon" onClick={() => openOverlay(1)}>
+          {<div className="label-icon" onClick={() => openOverlay(1)}>
             <svg
               width="40"
               height="40"
@@ -411,19 +413,20 @@ const Dashboard = () => {
         <div id="stocks">
           <Stocks
             gradient="linear-gradient(130deg, #da77d6 0.75%, #7526c5 100%)"
-            loading={loadingData[0]}
-            setloading={setloadingDataByType}
-            isDataLoaded={loadingData.reduce((a, b) => a + b)}
-            setPurchasePrice={setassetPurchasePriceByType}
-            openOverlay={openEditOverlay}
-            addeditoverlayhandle={openOverlay}
-            currentOpenOverlay={overlay}
+          // loading={loadingData[0]}
+          // setloading={setloadingDataByType}
+          // isDataLoaded={loadingData.reduce((a, b) => a + b)}
+          // setPurchasePrice={setassetPurchasePriceByType}
+          // openOverlay={openEditOverlay}
+          // addeditoverlayhandle={openOverlay}
+          // currentOpenOverlay={overlay}
           />
+
         </div>
 
         <div className="label-grid">
           <div className="label-dashboard">My Crypto</div>
-          {loadingData[1] === 0 && <div className="label-icon" onClick={() => openOverlay(3)}>
+          {<div className="label-icon" onClick={() => openOverlay(3)}>
             <svg
               width="40"
               height="40"
@@ -462,19 +465,19 @@ const Dashboard = () => {
         <div id="crypto">
           <Crypto
             gradient="linear-gradient(129.95deg, #70A3E0 0.75%, #7924CD 100%)"
-            loading={loadingData[1]}
-            setloading={setloadingDataByType}
-            isDataLoaded={loadingData.reduce((a, b) => a + b)}
-            setPurchasePrice={setassetPurchasePriceByType}
-            openOverlay={openEditOverlay}
-            addeditoverlayhandle={openOverlay}
-            currentOpenOverlay={overlay}
+          // loading={loadingData[1]}
+          // setloading={setloadingDataByType}
+          // isDataLoaded={loadingData.reduce((a, b) => a + b)}
+          // setPurchasePrice={setassetPurchasePriceByType}
+          // openOverlay={openEditOverlay}
+          // addeditoverlayhandle={openOverlay}
+          // currentOpenOverlay={overlay}
           />
         </div>
 
         <div className="label-grid">
           <div className="label-dashboard">My Bonds</div>
-          {loadingData[2] === 0 && <div className="label-icon" onClick={() => openOverlay(5)}>
+          {<div className="label-icon" onClick={() => openOverlay(5)}>
             <svg
               width="40"
               height="40"
@@ -513,20 +516,20 @@ const Dashboard = () => {
         <div id="bonds">
           <Bonds
             gradient="linear-gradient(129.95deg, #D96587 0.75%, #DF275F 100%)"
-            loading={loadingData[2]}
-            setloading={setloadingDataByType}
-            isDataLoaded={loadingData.reduce((a, b) => a + b)}
-            setPurchasePrice={setassetPurchasePriceByType}
-            openOverlay={openEditOverlay}
-            addeditoverlayhandle={openOverlay}
-            currentOpenOverlay={overlay}
+          // loading={loadingData[2]}
+          // setloading={setloadingDataByType}
+          // isDataLoaded={loadingData.reduce((a, b) => a + b)}
+          // setPurchasePrice={setassetPurchasePriceByType}
+          // openOverlay={openEditOverlay}
+          // addeditoverlayhandle={openOverlay}
+          // currentOpenOverlay={overlay}
           />
         </div>
 
 
         <div className="label-grid">
           <div className="label-dashboard">Other Assets</div>
-          {loadingData[3] === 0 && <div className="label-icon" onClick={() => openOverlay(7)}>
+          {<div className="label-icon" onClick={() => openOverlay(7)}>
             <svg
               width="40"
               height="40"
@@ -565,13 +568,13 @@ const Dashboard = () => {
         <div id="other-assets">
           <OtherAssets
             gradient="linear-gradient(to right, #2C5364, #203A43, #0F2027)"
-            loading={loadingData[3]}
-            setloading={setloadingDataByType}
-            isDataLoaded={loadingData.reduce((a, b) => a + b)}
-            setPurchasePrice={setassetPurchasePriceByType}
-            openOverlay={openEditOverlay}
-            addeditoverlayhandle={openOverlay}
-            currentOpenOverlay={overlay}
+            // loading={loadingData[3]}
+            // setloading={setloadingDataByType}
+            // isDataLoaded={loadingData.reduce((a, b) => a + b)}
+            // setPurchasePrice={setassetPurchasePriceByType}
+            // openOverlay={openEditOverlay}
+            // addeditoverlayhandle={openOverlay}
+            // currentOpenOverlay={overlay}
           />
         </div>
 
@@ -581,4 +584,9 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+// these are the functions which are required to map the state to the props and dispatch actions to store
+const mapStateToProps = state => ({
+  ...state
+});
+
+export default connect(mapStateToProps)(Dashboard);

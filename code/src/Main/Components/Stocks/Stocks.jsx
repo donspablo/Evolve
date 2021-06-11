@@ -3,18 +3,24 @@ import "../table.css";
 import './stocks.css';
 import StockDeleteOverlay from "./StockDeleteOverlay";
 import axios from "axios";
+import { connect } from 'react-redux';
 
 const Stocks = (props) => {
   let isunmounted = false;
 
-  let [stockData, setStockData] = useState([]);
+  // let [stockData, setStockData] = useState([]);
   let [deleteOverlay, setDeleteOverlay] = useState(-1); //using the deleteOverlay value to store the transaction ID of the stock to be deleted
 
-  let findTotalPurchasePrice = () => {
+  let findTotalPurchasePrice = (stocks) => {
+
+    if(stocks.length === 0){
+      return 0;
+    }
+
     //total purchase price variable
     let totalPurchasePrice = 0;
 
-    stockData.map((stock) => {
+    stocks.map((stock) => {
       totalPurchasePrice += parseFloat(stock.purchase_price) * stock.quantity;
     });
 
@@ -27,10 +33,10 @@ const Stocks = (props) => {
     return date[2] + "/" + date[1] + "/" + date[0];
   };
 
-  let starttoLoad = () => {
-    props.setloading(1, 1);
-    fetchStockData();
-  }
+  // let starttoLoad = () => {
+  //   props.setloading(1, 1);
+  //   fetchStockData();
+  // }
 
   let fetchStockData = async () => {
 
@@ -48,18 +54,48 @@ const Stocks = (props) => {
       //console.log(isunmounted);
 
       if (response.status === 200 && !isunmounted) {
+
+        //! Set stocks, stock purchase price to store and stocks loading to 0
+
         if (!response.data.msg) {
-          setStockData(response.data);
+          //setStockData(response.data);
+          const stockData = {
+            type: "setstockdetails",
+            payload:  
+            {
+              stocks:response.data,
+              stockPurchasePrice: findTotalPurchasePrice(response.data),
+              stockLoading: 0
+            }
+          }
+
+          //* Dispatcher for setting stock data
+          props.setstockdata(stockData);
+
+          
         } else {
-          setStockData([]) //resetting stocks to none
+          //setStockData([]) //resetting stocks to none
+
+          const stockData = {
+            type: "setstockdetails",
+            payload:  
+            {
+              stocks:[],
+              stockPurchasePrice: 0,
+              stockLoading: 0
+            }
+          }
+
+          //* Dispatcher for setting stock data
+          props.setstockdata(stockData);
         }
 
-        props.setloading(1, 0);
-        setDeleteOverlay(-1); //for closing the delete overlay on deleting stock
+        //props.setloading(1, 0);
+        //setDeleteOverlay(-1); //for closing the delete overlay on deleting stock
 
-        if (props.currentOpenOverlay === 1 || props.currentOpenOverlay === 2) {
-          props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing stock
-        }
+        // if (props.currentOpenOverlay === 1 || props.currentOpenOverlay === 2) {
+        //   props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing stock
+        // }
       } else {
         console.log("Some error occurred!");
       }
@@ -70,7 +106,7 @@ const Stocks = (props) => {
 
   useEffect(() => {
 
-    if (props.loading === 1) {
+    if(props.stockLoading === 1){
       fetchStockData();
     }
     
@@ -78,12 +114,14 @@ const Stocks = (props) => {
       isunmounted = true;
     };
 
-  }, [props.loading]);
+  }, [props.stockLoading]);
 
-  useEffect(() => {
-    props.setPurchasePrice(1, findTotalPurchasePrice());
-  }, [props.isDataLoaded])
+  // useEffect(() => {
+  //   props.setPurchasePrice(1, findTotalPurchasePrice());
+  // }, [props.isDataLoaded])
 
+
+  // !Change this to original current price from API
   let currentdata = ["132.03", "732.23", "3333.00"];
   let totalcp = 0;
 
@@ -97,7 +135,7 @@ const Stocks = (props) => {
           startLoadingAgain={starttoLoad}
         />
       )}
-      {stockData.length > 0 ?
+      {props.stocks.length > 0 ?
         <>
           <table id="main-table">
             <thead>
@@ -113,7 +151,7 @@ const Stocks = (props) => {
             </thead>
             <tbody>
               {
-                stockData.map((stock, index) => {
+                props.stocks.map((stock, index) => {
 
                   const gainloss = (parseFloat(currentdata[index])*stock.quantity - parseFloat(stock.purchase_price)*stock.quantity).toFixed(2);
                   let glmain = null;
@@ -149,7 +187,7 @@ const Stocks = (props) => {
                 <td>TOTAL</td>
                 <td></td>
                 <td></td>
-                <td>{"₹" + findTotalPurchasePrice()}</td>
+                <td>{"₹" + findTotalPurchasePrice(props.stocks)}</td>
                 <td>{"₹" + totalcp.toFixed(2)}</td>
                 <td></td>
               </tr>
@@ -165,7 +203,7 @@ const Stocks = (props) => {
               </thead>
               <tbody>
 
-                {stockData.map((stock, index) => {
+                {props.stocks.map((stock, index) => {
                   {
                     /*Stock data*/
                   }
@@ -255,9 +293,21 @@ const Stocks = (props) => {
               </tbody>
             </table>
           </div>
-        </> : props.loading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your stocks... </div> : <div className="msg"> No stocks added yet! </div>}
+        </> : props.stockLoading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your stocks... </div> : <div className="msg"> No stocks added yet! </div>}
     </>
   );
 };
 
-export default Stocks;
+
+// these are the functions which are required to map the state to the props and dispatch actions to store
+
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  setstockdata: (stockdata) => dispatch(stockdata),
+  showdet2: () => dispatch()
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Stocks);

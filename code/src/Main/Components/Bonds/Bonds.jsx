@@ -3,19 +3,25 @@ import "../table.css";
 import './bonds.css';
 import BondDeleteOverlay from "./BondDeleteOverlay";
 import axios from "axios";
+import { connect } from "react-redux";
 
 const Bonds = (props) => {
 
   let isunmounted = false;
 
-  let [bondData, setBondData] = useState([]);
+  //let [bondData, setBondData] = useState([]);
   let [deleteOverlay, setDeleteOverlay] = useState(-1); //using the deleteOverlay value to store the transaction ID of the bond to be deleted
 
-  let findTotalFaceValue = () => {
+  let findTotalFaceValue = (bonds) => {
+
+    if(bonds.length === 0){
+      return 0;
+    }
+
     //total purchase price variable
     let totalPurchasePrice = 0;
 
-    bondData.map((bond) => {
+    bonds.map((bond) => {
       totalPurchasePrice += parseFloat(bond.face_value);
     });
 
@@ -28,10 +34,10 @@ const Bonds = (props) => {
     return date[2] + "/" + date[1] + "/" + date[0];
   };
 
-  let starttoLoad = () => {
-    props.setloading(3, 1);
-    fetchBondData();
-  }
+  // let starttoLoad = () => {
+  //   props.setloading(3, 1);
+  //   fetchBondData();
+  // }
 
 
   let fetchBondData = async () => {
@@ -48,18 +54,44 @@ const Bonds = (props) => {
       let response = await axios.post(BOND_ENDPOINT, data);
 
       if (response.status === 200 && !isunmounted) {
+
         if (!response.data.msg) {
-          setBondData(response.data);
+          //setBondData(response.data);
+          const bondData = {
+            type: "setbonddetails",
+            payload:  
+            {
+              bonds:response.data,
+              bondPurchasePrice: findTotalFaceValue(response.data),
+              bondLoading: 0
+            }
+          }
+
+          //* Dispatcher for setting bond data
+          props.setbonddata(bondData);
+
         } else {
-          setBondData([]) //resetting bonds to none
+          //setBondData([]) //resetting bonds to none
+          const bondData = {
+            type: "setbonddetails",
+            payload:  
+            {
+              bonds:[],
+              bondPurchasePrice: 0,
+              bondLoading: 0
+            }
+          }
+
+          //* Dispatcher for setting bond data
+          props.setbonddata(bondData);
         }
 
-        props.setloading(3, 0);
+        // props.setloading(3, 0);
 
-        setDeleteOverlay(-1); //for closing the delete overlay on deleting bond
-        if (props.currentOpenOverlay === 5 || props.currentOpenOverlay === 6) {
-          props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing bond
-        }
+        // setDeleteOverlay(-1); //for closing the delete overlay on deleting bond
+        // if (props.currentOpenOverlay === 5 || props.currentOpenOverlay === 6) {
+        //   props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing bond
+        // }
       } else {
         console.log("Some error occurred!");
       }
@@ -69,7 +101,8 @@ const Bonds = (props) => {
   };
 
   useEffect(() => {
-    if (props.loading === 1) {
+
+    if(props.bondLoading === 1){
       fetchBondData();
     }
 
@@ -77,11 +110,11 @@ const Bonds = (props) => {
       isunmounted = true;
     };
 
-  }, [props.loading]);
+  }, [props.bondLoading]);
 
-  useEffect(() => {
-    props.setPurchasePrice(3, findTotalFaceValue());
-  }, [props.isDataLoaded])
+  // useEffect(() => {
+  //   props.setPurchasePrice(3, findTotalFaceValue());
+  // }, [props.isDataLoaded])
 
   return (
     <>
@@ -93,7 +126,7 @@ const Bonds = (props) => {
           startLoadingAgain={starttoLoad}
         />
       )}
-      {bondData.length > 0 ?
+      {props.bonds.length > 0 ?
         <>
           <table id="main-table">
             <thead>
@@ -110,7 +143,7 @@ const Bonds = (props) => {
             </thead>
             <tbody>
               {
-                bondData.map((bond, index) => {
+                props.bonds.map((bond, index) => {
                   return (
                     <tr
                       className="data"
@@ -134,7 +167,7 @@ const Bonds = (props) => {
                 <td></td>
                 <td>TOTAL</td>
                 <td></td>
-                <td>{"₹" + findTotalFaceValue()}</td>
+                <td>{"₹" + findTotalFaceValue(props.bonds)}</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -152,7 +185,7 @@ const Bonds = (props) => {
               </thead>
               <tbody>
 
-                {bondData.map((bond, index) => {
+                {props.bonds.map((bond, index) => {
                   {
                     /*bond data*/
                   }
@@ -244,9 +277,19 @@ const Bonds = (props) => {
               </tbody>
             </table>
           </div>
-        </> : props.loading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your bonds... </div> : <div className="msg"> No bonds added yet! </div>}
+        </> : props.bondLoading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your bonds... </div> : <div className="msg"> No bonds added yet! </div>}
     </>
   );
 };
 
-export default Bonds;
+// these are the functions which are required to map the state to the props and dispatch actions to store
+
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  setbonddata: (bonddata) => dispatch(bonddata),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Bonds);

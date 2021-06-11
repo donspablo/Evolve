@@ -3,19 +3,25 @@ import "../table.css";
 import './crypto.css';
 import CryptoDeleteOverlay from "./CryptoDeleteOverlay";
 import axios from "axios";
+import { connect } from "react-redux";
 
 const Crypto = (props) => {
 
   let isunmounted = false;
 
-  let [cryptoData, setcryptoData] = useState([]);
+  // let [cryptoData, setcryptoData] = useState([]);
   let [deleteOverlay, setDeleteOverlay] = useState(-1); //using the deleteOverlay value to store the transaction ID of the crypto to be deleted
 
-  let findTotalPurchasePrice = () => {
+  let findTotalPurchasePrice = (cryptos) => {
+
+    if(cryptos.length === 0){
+      return 0;
+    }
+
     //total purchase price variable
     let totalPurchasePrice = 0;
 
-    cryptoData.map((crypto) => {
+    cryptos.map((crypto) => {
       totalPurchasePrice += parseFloat(crypto.purchase_price) * crypto.quantity;
     });
 
@@ -28,10 +34,10 @@ const Crypto = (props) => {
     return date[2] + "/" + date[1] + "/" + date[0];
   };
 
-  let starttoLoad = () => {
-    props.setloading(2, 1);
-    fetchcryptoData();
-  }
+  // let starttoLoad = () => {
+  //   props.setloading(2, 1);
+  //   fetchcryptoData();
+  // }
 
 
   let fetchcryptoData = async () => {
@@ -47,18 +53,46 @@ const Crypto = (props) => {
       let response = await axios.post(CRYPTO_ENDPOINT, data);
 
       if (response.status === 200 && !isunmounted) {
+
+
         if (!response.data.msg) {
-          setcryptoData(response.data);
+          // setcryptoData(response.data);
+          const cryptoData = {
+            type: "setcryptodetails",
+            payload:  
+            {
+              crypto:response.data,
+              cryptoPurchasePrice: findTotalPurchasePrice(response.data),
+              cryptoLoading: 0
+            }
+          }
+
+          //* Dispatcher for setting crypto data
+          props.setcryptodata(cryptoData);
+
         } else {
-          setcryptoData([]) //resetting Crypto to none
+          // setcryptoData([]) //resetting Crypto to none
+
+          const cryptoData = {
+            type: "setcryptodetails",
+            payload:  
+            {
+              crypto:[],
+              cryptoPurchasePrice: 0,
+              cryptoLoading: 0
+            }
+          }
+
+          //* Dispatcher for setting crypto data
+          props.setcryptodata(cryptoData);
         }
         
-        props.setloading(2, 0);
+        // props.setloading(2, 0);
 
-        setDeleteOverlay(-1); //for closing the delete overlay on deleting crypto
-        if (props.currentOpenOverlay === 3 || props.currentOpenOverlay === 4) {
-          props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing crypto
-        }
+        // setDeleteOverlay(-1); //for closing the delete overlay on deleting crypto
+        // if (props.currentOpenOverlay === 3 || props.currentOpenOverlay === 4) {
+        //   props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing crypto
+        // }
       } else {
         console.log("Some error occurred!");
       }
@@ -68,7 +102,8 @@ const Crypto = (props) => {
   };
 
   useEffect(() => {
-    if (props.loading === 1) {
+    
+    if(props.cryptoLoading === 1){
       fetchcryptoData();
     }
 
@@ -76,11 +111,11 @@ const Crypto = (props) => {
       isunmounted = true;
     };
 
-  }, [props.loading]);
+  }, [props.cryptoLoading]);
 
-  useEffect(() => {
-    props.setPurchasePrice(2, findTotalPurchasePrice());
-  }, [props.isDataLoaded])
+  // useEffect(() => {
+  //   props.setPurchasePrice(2, findTotalPurchasePrice());
+  // }, [props.isDataLoaded])
 
 
   return (
@@ -93,7 +128,7 @@ const Crypto = (props) => {
           startLoadingAgain={starttoLoad}
         />
       )}
-      {cryptoData.length > 0 ?
+      {props.crypto.length > 0 ?
         <>
           <table id="main-table">
             <thead>
@@ -109,7 +144,7 @@ const Crypto = (props) => {
             </thead>
             <tbody>
               {
-                cryptoData.map((crypto, index) => {
+                props.crypto.map((crypto, index) => {
                   return (
                     <tr
                       className="data"
@@ -133,7 +168,7 @@ const Crypto = (props) => {
                 <td>TOTAL</td>
                 <td></td>
                 <td></td>
-                <td>{"₹" + findTotalPurchasePrice()}</td>
+                <td>{"₹" + findTotalPurchasePrice(props.crypto)}</td>
                 <td>{"₹62668.40"}</td>
                 <td></td>
               </tr>
@@ -149,7 +184,7 @@ const Crypto = (props) => {
               </thead>
               <tbody>
                 {
-                  cryptoData.map((crypto, index) => {
+                  props.crypto.map((crypto, index) => {
                     {
                       /*crypto data*/
                     }
@@ -239,10 +274,21 @@ const Crypto = (props) => {
               </tbody>
             </table>
           </div>
-        </> : props.loading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your crypto... </div> : <div className="msg"> No cryptocurrencies added yet! </div>}
+        </> : props.cryptoLoading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your crypto... </div> : <div className="msg"> No cryptocurrencies added yet! </div>}
     </>
   );
 };
 
-export default Crypto;
+// these are the functions which are required to map the state to the props and dispatch actions to store
+
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  setcryptodata: (cryptodata) => dispatch(cryptodata),
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Crypto);
 

@@ -3,19 +3,25 @@ import "../table.css";
 import './otherassets.css';
 import OtherAssetDeleteOverlay from "./OtherAssetDeleteOverlay";
 import axios from "axios";
+import { connect } from "react-redux";
 
 const OtherAssets = (props) => {
 
   let isunmounted = false;
 
-  let [otherAssetData, setotherAssetData] = useState([]);
+  //let [otherAssetData, setotherAssetData] = useState([]);
   let [deleteOverlay, setDeleteOverlay] = useState(-1); //using the deleteOverlay value to store the transaction ID of the other asset to be deleted
 
-  let findTotalPurchasePrice = () => {
+  let findTotalPurchasePrice = (others) => {
+
+    if(others.length === 0){
+      return 0;
+    }
+
     //total purchase price variable
     let totalPurchasePrice = 0;
 
-    otherAssetData.map((otherAsset) => {
+    others.map((otherAsset) => {
       totalPurchasePrice += parseFloat(otherAsset.purchase_price);
     });
 
@@ -28,10 +34,10 @@ const OtherAssets = (props) => {
     return date[2] + "/" + date[1] + "/" + date[0];
   };
 
-  let starttoLoad = () => {
-    props.setloading(4, 1);
-    fetchotherAssetData();
-  }
+  // let starttoLoad = () => {
+  //   props.setloading(4, 1);
+  //   fetchotherAssetData();
+  // }
 
 
   let fetchotherAssetData = async () => {
@@ -51,18 +57,44 @@ const OtherAssets = (props) => {
 
       if (response.status === 200 && !isunmounted) {
         if (!response.data.msg) {
-          setotherAssetData(response.data);
+          //setotherAssetData(response.data);
+          const othersData = {
+            type: "setothersdetails",
+            payload:  
+            {
+              others:response.data,
+              othersPurchasePrice: findTotalPurchasePrice(response.data),
+              othersLoading: 0
+            }
+          }
+
+          //* Dispatcher for setting other asset data
+          props.setothersdata(othersData);
+
         } else {
-          setotherAssetData([]) //resetting other assets to none
+          //setotherAssetData([]) //resetting other assets to none
+          const othersData = {
+            type: "setothersdetails",
+            payload:  
+            {
+              others:[],
+              othersPurchasePrice: 0,
+              othersLoading: 0
+            }
+          }
+
+          //* Dispatcher for setting other asset data
+          props.setothersdata(othersData);
+
         }
 
-        props.setloading(4, 0);
+        // props.setloading(4, 0);
 
-        setDeleteOverlay(-1); //for closing the delete overlay on deleting other asset
+        // setDeleteOverlay(-1); //for closing the delete overlay on deleting other asset
 
-        if (props.currentOpenOverlay === 7 || props.currentOpenOverlay === 8) {
-          props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing other asset
-        }
+        // if (props.currentOpenOverlay === 7 || props.currentOpenOverlay === 8) {
+        //   props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing other asset
+        // }
       } else {
         console.log("Some error occurred!");
       }
@@ -72,7 +104,7 @@ const OtherAssets = (props) => {
   };
 
   useEffect(() => {
-    if (props.loading === 1) {
+    if (props.othersLoading === 1) {
       //console.log("called");
       fetchotherAssetData();
     }
@@ -82,11 +114,11 @@ const OtherAssets = (props) => {
       isunmounted = true;
     };
 
-  }, [props.loading]);
+  }, [props.othersLoading]);
 
-  useEffect(() => {
-    props.setPurchasePrice(4, findTotalPurchasePrice());
-  }, [props.isDataLoaded])
+  // useEffect(() => {
+  //   props.setPurchasePrice(4, findTotalPurchasePrice());
+  // }, [props.isDataLoaded])
 
   return (
     <>
@@ -98,7 +130,7 @@ const OtherAssets = (props) => {
           startLoadingAgain={starttoLoad}
         />
       )}
-      {otherAssetData.length > 0 ?
+      {props.others.length > 0 ?
         <>
           <table id="main-table">
             <thead>
@@ -133,7 +165,7 @@ const OtherAssets = (props) => {
                 <td></td>
                 <td>TOTAL</td>
                 <td></td>
-                <td>{"₹" + findTotalPurchasePrice()}</td>
+                <td>{"₹" + findTotalPurchasePrice(props.others)}</td>
                 <td></td>
               </tr>
 
@@ -148,7 +180,7 @@ const OtherAssets = (props) => {
               </thead>
               <tbody>
 
-                {otherAssetData.map((otherAsset, index) => {
+                {props.others.map((otherAsset, index) => {
                   {
                     /*other asset data*/
                   }
@@ -238,9 +270,19 @@ const OtherAssets = (props) => {
               </tbody>
             </table>
           </div>
-        </> : props.loading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your other assets... </div> : <div className="msg">No assets added yet! </div>}
+        </> : props.othersLoading === 1 ? <div className="msg" style={{ color: "white" }}> Loading your other assets... </div> : <div className="msg">No assets added yet! </div>}
     </>
   );
 };
 
-export default OtherAssets;
+// these are the functions which are required to map the state to the props and dispatch actions to store
+
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  setothersdata: (othersdata) => dispatch(othersdata),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OtherAssets);

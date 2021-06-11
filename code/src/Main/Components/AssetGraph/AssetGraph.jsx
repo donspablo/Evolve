@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Chart from 'react-apexcharts'
 import "../box.css";
 import "./assetgraph.css";
+import { connect } from 'react-redux';
 class AssetGraph extends Component {
 
   constructor(props) {
@@ -55,33 +56,32 @@ class AssetGraph extends Component {
         },
         },
         labels: ['Stocks', 'Crypto', 'Bonds', 'Other Assets']
-      },
-      series:[],
-      loading: 1
-    }
-  }
-  
-  componentDidUpdate(prevProps){
-
-    if(prevProps.purchasePrice !== this.props.purchasePrice && this.props.isDataLoaded === 0){
-      this.setState({series: this.props.purchasePrice, loading: 0})
+      }
     }
   }
 
   render() {
 
+    let isDataLoaded = this.props.stockLoading + this.props.cryptoLoading + this.props.bondLoading + this.props.othersLoading;
+    let purpricearr = [parseFloat(this.props.stockPurchasePrice),parseFloat(this.props.cryptoPurchasePrice),parseFloat(this.props.bondPurchasePrice),parseFloat(this.props.othersPurchasePrice)];
+
     // console.log(this.props.isDataLoaded);
     // console.log(this.props.purchasePrice);
-
     return (
       <div className="box assetgraph" style={this.props.gradient}>
         <span className="title">Purchase Price Distribution</span>
         <div id="chart-holder">
-        {this.state.loading === 0 ? this.state.series.reduce((a,b) => a + b) !== 0 ? <Chart options={this.state.options} series={this.state.series} type="donut" width="400" /> : <span id="chart-status">No assets!</span> : <span id="chart-status">Loading chart...</span>}
+        {isDataLoaded === 0 ? purpricearr.reduce((a,b) => a + b) !== 0 ? <Chart options={this.state.options} series={purpricearr} type="donut" width="400" /> : <span id="chart-status">No assets!</span> : <span id="chart-status">Loading chart...</span>}
         </div>
       </div>
     );
   }
 }
 
-export default AssetGraph;
+// these are the functions which are required to map the state to the props and dispatch actions to store
+
+const mapStateToProps = state => ({
+  ...state
+});
+
+export default connect(mapStateToProps)(AssetGraph);
