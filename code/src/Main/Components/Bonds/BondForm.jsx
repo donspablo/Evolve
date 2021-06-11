@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../form.css";
+import { connect } from "react-redux";
 
 const BondForm = (props) => {
 
@@ -111,7 +112,7 @@ const BondForm = (props) => {
         errorSet(response.data.error);
       } else if (response.status === 200) {
         console.log(response.data);
-        props.setloading(3, 1);
+        props.setLoading({type:"setLoading", payload:{bondLoading:1}})
       }
     } catch (e) {
       console.log(e);
@@ -123,7 +124,7 @@ const BondForm = (props) => {
       <div id="box">
         <svg
           id="close"
-          onClick={text === "Add Bond" ? () => props.overlayhandle(0) : null}
+          onClick={text === "Add Bond" ? () => props.closeOverlay({type:"setOverlay", payload:{overlay:0}}) : null}
           style={{ background: text === "Add Bond" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)" }}
           width="24"
           height="24"
@@ -240,4 +241,14 @@ const BondForm = (props) => {
   );
 };
 
-export default BondForm;
+// these are the functions which are required to map the state to the props and dispatch actions to store
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  closeOverlay: (overlaytype) => dispatch(overlaytype),
+  setLoading: (loadingData) => dispatch(loadingData)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(BondForm);

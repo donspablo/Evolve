@@ -27,10 +27,10 @@ const Dashboard = (props) => {
   //loading status for assets
   // let [loadingData, setloadingData] = useState([1, 1, 1, 1])
   //overlay
-  let [overlay, setOverlayType] = useState(0); //0 - not open, 1 - add stock, 2 - edit stock, 3 - add crypto, 4 - edit crypto, 5 - add bond, 6 - edit bond
+  //let [overlay, setOverlayType] = useState(0); //0 - not open, 1 - add stock, 2 - edit stock, 3 - add crypto, 4 - edit crypto, 5 - add bond, 6 - edit bond
 
   //edit form data
-  let [editFormData, setEditFormData] = useState({});
+  //let [editFormData, setEditFormData] = useState({});
 
   // let setassetPurchasePriceByType = (type, newprice) => {
   //   let newassetPurchasePrice = assetPurchasePrice;
@@ -49,14 +49,14 @@ const Dashboard = (props) => {
     console.log("Clicked " + type);
   };
 
-  let openOverlay = (overlaytype) => {
-    setOverlayType(overlaytype);
-  };
+  // let openOverlay = (overlaytype) => {
+  //   setOverlayType(overlaytype);
+  // };
 
-  let openEditOverlay = (stockData, type) => {
-    setEditFormData(stockData);
-    setOverlayType(type);
-  };
+  // let openEditOverlay = (stockData, type) => {
+  //   setEditFormData(stockData);
+  //   setOverlayType(type);
+  // };
 
   // console.log(loadingData)
   // console.log(assetPurchasePrice)
@@ -226,82 +226,82 @@ const Dashboard = (props) => {
 
   return (
     <>
-      {overlay !== 0 && (
+      {props.overlay !== 0 && (
         <Overlay>
           {/*Add Stock Form*/}
-          {overlay === 1 && (
+          {props.overlay === 1 && (
             <StockForm
               border="1px solid #da77d6"
-              overlayhandle={openOverlay}
+              //overlayhandle={openOverlay}
             //setloading={setloadingDataByType}
             />
           )}
 
           {/*Edit Stock Form*/}
-          {overlay === 2 && (
+          {props.overlay === 2 && (
             <StockEditForm
               border="1px solid #da77d6"
-              overlayhandle={openOverlay}
-              stockData={editFormData}
+              //overlayhandle={openOverlay}
+              //stockData={editFormData}
             //setloading={setloadingDataByType}
             />
           )}
 
           {/*Crypto Form*/}
-          {overlay === 3 && (
+          {props.overlay === 3 && (
             <CryptoForm
               border="1px solid #70A3E0"
-              overlayhandle={openOverlay}
+              //overlayhandle={openOverlay}
             //setloading={setloadingDataByType}
             />
           )}
 
           {/*Edit Crypto form*/}
-          {overlay === 4 && (
+          {props.overlay === 4 && (
             <CryptoEditForm
               border="1px solid #70A3E0"
-              overlayhandle={openOverlay}
-              cryptoData={editFormData}
+              //overlayhandle={openOverlay}
+             // cryptoData={editFormData}
             //setloading={setloadingDataByType}
             />
           )}
 
           {/*Add Bond form*/}
-          {overlay === 5 && (
+          {props.overlay === 5 && (
             <BondForm
               border="1px solid #D96587"
-              overlayhandle={openOverlay}
+              //overlayhandle={openOverlay}
             //setloading={setloadingDataByType}
             />
           )}
 
           {/*Edit Bond form*/}
-          {overlay === 6 && (
+          {props.overlay === 6 && (
             <BondEditForm
               border="1px solid #D96587"
-              overlayhandle={openOverlay}
-              bondData={editFormData}
+              //overlayhandle={openOverlay}
+              //bondData={editFormData}
             //setloading={setloadingDataByType}
             />
           )}
 
           {/*Add other asset form*/}
-          {overlay === 7 && (
+          {props.overlay === 7 && (
             <OtherAssetForm
               border="1px solid #2C5364"
-              overlayhandle={openOverlay}
-              bondData={editFormData}
+              //overlayhandle={openOverlay}
+              //bondData={editFormData}
             //setloading={setloadingDataByType}
             />
           )}
 
 
           {/*Edit Other Asset form*/}
-          {overlay === 8 && (
+          {props.overlay === 8 && (
             <OtherAssetEditForm
               border="1px solid #2C5364"
-              overlayhandle={openOverlay}
-              otherAssetData={editFormData}
+              //overlayhandle={openOverlay}
+              //otherAssetData={editFormData}
             //setloading={setloadingDataByType}
             />
           )}
@@ -374,7 +374,7 @@ const Dashboard = (props) => {
 
         <div className="label-grid">
           <div className="label-dashboard">My Stocks</div>
-          {<div className="label-icon" onClick={() => openOverlay(1)}>
+          {<div className="label-icon" onClick={() => props.openOverlay({type:"setOverlay", payload:{overlay:1}})}>
             <svg
               width="40"
               height="40"
@@ -426,7 +426,7 @@ const Dashboard = (props) => {
 
         <div className="label-grid">
           <div className="label-dashboard">My Crypto</div>
-          {<div className="label-icon" onClick={() => openOverlay(3)}>
+          {<div className="label-icon" onClick={() => props.openOverlay({type:"setOverlay", payload:{overlay:3}})}>
             <svg
               width="40"
               height="40"
@@ -477,7 +477,7 @@ const Dashboard = (props) => {
 
         <div className="label-grid">
           <div className="label-dashboard">My Bonds</div>
-          {<div className="label-icon" onClick={() => openOverlay(5)}>
+          {<div className="label-icon" onClick={() => props.openOverlay({type:"setOverlay", payload:{overlay:5}})}>
             <svg
               width="40"
               height="40"
@@ -529,7 +529,7 @@ const Dashboard = (props) => {
 
         <div className="label-grid">
           <div className="label-dashboard">Other Assets</div>
-          {<div className="label-icon" onClick={() => openOverlay(7)}>
+          {<div className="label-icon" onClick={() => props.openOverlay({type:"setOverlay", payload:{overlay:7}})}>
             <svg
               width="40"
               height="40"
@@ -589,4 +589,9 @@ const mapStateToProps = state => ({
   ...state
 });
 
-export default connect(mapStateToProps)(Dashboard);
+const mapDispatchToProps = dispatch => ({
+  openOverlay: (overlaytype) => dispatch(overlaytype)
+});
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);

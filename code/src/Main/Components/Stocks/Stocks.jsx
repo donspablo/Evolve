@@ -65,7 +65,8 @@ const Stocks = (props) => {
             {
               stocks:response.data,
               stockPurchasePrice: findTotalPurchasePrice(response.data),
-              stockLoading: 0
+              stockLoading: 0,
+              overlay:0
             }
           }
 
@@ -82,7 +83,8 @@ const Stocks = (props) => {
             {
               stocks:[],
               stockPurchasePrice: 0,
-              stockLoading: 0
+              stockLoading: 0,
+              overlay:0
             }
           }
 
@@ -91,7 +93,7 @@ const Stocks = (props) => {
         }
 
         //props.setloading(1, 0);
-        //setDeleteOverlay(-1); //for closing the delete overlay on deleting stock
+        setDeleteOverlay(-1); //for closing the delete overlay on deleting stock
 
         // if (props.currentOpenOverlay === 1 || props.currentOpenOverlay === 2) {
         //   props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing stock
@@ -132,7 +134,7 @@ const Stocks = (props) => {
           stocktid={deleteOverlay} //this variable stores the transaction id of the stock to be deleted
           setOverlay={setDeleteOverlay}
           height={document.getElementById("stocks").clientHeight}
-          startLoadingAgain={starttoLoad}
+          //startLoadingAgain={starttoLoad}
         />
       )}
       {props.stocks.length > 0 ?
@@ -221,7 +223,7 @@ const Stocks = (props) => {
                         <div className="edit-icons">
                           {/*Edit icon*/}
                           <svg
-                            onClick={() => props.openOverlay(stockdata, 2)}
+                            onClick={() => props.openOverlay({type:"setOverlay", payload:{editFormData:stockdata, overlay:2}})}
                             width="30"
                             height="30"
                             viewBox="0 0 40 40"
@@ -307,7 +309,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setstockdata: (stockdata) => dispatch(stockdata),
-  showdet2: () => dispatch()
+  openOverlay: (overlaytype) => dispatch(overlaytype)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stocks);

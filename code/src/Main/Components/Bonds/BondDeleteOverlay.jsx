@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 const BondDeleteOverlay = (props) => {
 
@@ -20,7 +21,7 @@ const BondDeleteOverlay = (props) => {
 
             if (response.status === 200 && !isunmounted) {
                 console.log(response.data);
-                props.startLoadingAgain(3, 1);
+                props.setLoading({type:"setLoading", payload:{bondLoading:1}});
             } else {
                 console.log(response.data.error);
             }
@@ -53,4 +54,13 @@ const BondDeleteOverlay = (props) => {
     );
 }
 
-export default BondDeleteOverlay;
+// these are the functions which are required to map the state to the props and dispatch actions to store
+const mapStateToProps = state => ({
+    ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+    setLoading: (loadingData) => dispatch(loadingData)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(BondDeleteOverlay);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../form.css";
+import { connect } from "react-redux";
 
 const CryptoForm = (props) => {
   const [data, setData] = useState({
@@ -95,7 +96,7 @@ const CryptoForm = (props) => {
         errorSet(response.data.error);
       } else if (response.status === 200) {
         console.log(response.data);
-        props.setloading(2, 1);
+        props.setLoading({type:"setLoading", payload:{cryptoLoading:1}})
         // props.overlayhandle(0);
       }
     } catch (e) {
@@ -108,7 +109,7 @@ const CryptoForm = (props) => {
       <div id="box">
         <svg
           id="close"
-          onClick={text === "Add Crypto" ? () =>  props.overlayhandle(0) : null}
+          onClick={text === "Add Crypto" ? () => props.closeOverlay({type:"setOverlay", payload:{overlay:0}}) : null}
           style={{background: text === "Add Crypto" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)"}}
           width="24"
           height="24"
@@ -208,4 +209,14 @@ const CryptoForm = (props) => {
   );
 };
 
-export default CryptoForm;
+// these are the functions which are required to map the state to the props and dispatch actions to store
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  closeOverlay: (overlaytype) => dispatch(overlaytype),
+  setLoading: (loadingData) => dispatch(loadingData)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CryptoForm);

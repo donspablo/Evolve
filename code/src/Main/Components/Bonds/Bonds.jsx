@@ -63,7 +63,8 @@ const Bonds = (props) => {
             {
               bonds:response.data,
               bondPurchasePrice: findTotalFaceValue(response.data),
-              bondLoading: 0
+              bondLoading: 0,
+              overlay:0
             }
           }
 
@@ -78,7 +79,8 @@ const Bonds = (props) => {
             {
               bonds:[],
               bondPurchasePrice: 0,
-              bondLoading: 0
+              bondLoading: 0,
+              overlay:0
             }
           }
 
@@ -88,7 +90,7 @@ const Bonds = (props) => {
 
         // props.setloading(3, 0);
 
-        // setDeleteOverlay(-1); //for closing the delete overlay on deleting bond
+        setDeleteOverlay(-1); //for closing the delete overlay on deleting bond
         // if (props.currentOpenOverlay === 5 || props.currentOpenOverlay === 6) {
         //   props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing bond
         // }
@@ -123,7 +125,7 @@ const Bonds = (props) => {
           bondtid={deleteOverlay} //this variable stores the transaction id of the bond to be deleted
           setOverlay={setDeleteOverlay}
           height={document.getElementById("bonds").clientHeight}
-          startLoadingAgain={starttoLoad}
+          //startLoadingAgain={starttoLoad}
         />
       )}
       {props.bonds.length > 0 ?
@@ -205,7 +207,7 @@ const Bonds = (props) => {
                         <div className="edit-icons">
                           {/*Edit icon*/}
                           <svg
-                            onClick={() => props.openOverlay(bonddata, 6)}
+                            onClick={() => props.openOverlay({type:"setOverlay", payload:{editFormData:bonddata, overlay:6}})}
                             width="30"
                             height="30"
                             viewBox="0 0 40 40"
@@ -290,6 +292,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setbonddata: (bonddata) => dispatch(bonddata),
+  openOverlay: (overlaytype) => dispatch(overlaytype)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Bonds);

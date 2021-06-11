@@ -1,12 +1,14 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "../form.css";
+import { connect } from "react-redux";
+
 
 const OtherAssetEditForm = (props) => {
 
   const [data, setData] = useState({
     type: "2", //edit other asset
-    ...props.otherAssetData,
+    ...props.editFormData
   });
 
   const [error, setError] = useState({ isSet: false, errorDesc: "" });
@@ -81,14 +83,14 @@ const OtherAssetEditForm = (props) => {
         //resetting the form
         setData({
           type: "2", //edit other asset
-          ...props.otherAssetData,
+          ...props.editFormData
         });
 
         //setting the error
         errorSet(response.data.error);
       } else if (response.status === 200) {
         console.log(response.data);
-        props.setloading(4, 1);
+        props.setLoading({type:"setLoading", payload:{othersLoading:1}})
       }
     } catch (e) {
       console.log(e);
@@ -100,7 +102,7 @@ const OtherAssetEditForm = (props) => {
       <div id="box">
         <svg
           id="close"
-          onClick={text === "Edit Asset" ? () =>  props.overlayhandle(0) : null}
+          onClick={text === "Edit Asset" ?  () => props.closeOverlay({type:"setOverlay", payload:{overlay:0}}) : null}
           style={{background: text === "Edit Asset" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)"}}
           width="24"
           height="24"
@@ -200,4 +202,14 @@ const OtherAssetEditForm = (props) => {
   );
 };
 
-export default OtherAssetEditForm;
+// these are the functions which are required to map the state to the props and dispatch actions to store
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  closeOverlay: (overlaytype) => dispatch(overlaytype),
+  setLoading: (loadingData) => dispatch(loadingData)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OtherAssetEditForm);

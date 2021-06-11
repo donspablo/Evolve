@@ -64,7 +64,8 @@ const OtherAssets = (props) => {
             {
               others:response.data,
               othersPurchasePrice: findTotalPurchasePrice(response.data),
-              othersLoading: 0
+              othersLoading: 0,
+              overlay:0
             }
           }
 
@@ -79,7 +80,8 @@ const OtherAssets = (props) => {
             {
               others:[],
               othersPurchasePrice: 0,
-              othersLoading: 0
+              othersLoading: 0,
+              overlay:0
             }
           }
 
@@ -90,7 +92,7 @@ const OtherAssets = (props) => {
 
         // props.setloading(4, 0);
 
-        // setDeleteOverlay(-1); //for closing the delete overlay on deleting other asset
+        setDeleteOverlay(-1); //for closing the delete overlay on deleting other asset
 
         // if (props.currentOpenOverlay === 7 || props.currentOpenOverlay === 8) {
         //   props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing other asset
@@ -127,7 +129,7 @@ const OtherAssets = (props) => {
           otherAssettid={deleteOverlay} //this variable stores the transaction id of the otherAsset to be deleted
           setOverlay={setDeleteOverlay}
           height={document.getElementById("other-assets").clientHeight}
-          startLoadingAgain={starttoLoad}
+          //startLoadingAgain={starttoLoad}
         />
       )}
       {props.others.length > 0 ?
@@ -144,7 +146,7 @@ const OtherAssets = (props) => {
             </thead>
             <tbody>
               {
-                otherAssetData.map((otherAsset, index) => {
+                props.others.map((otherAsset, index) => {
                   return (
                     <tr
                       className="data"
@@ -198,7 +200,7 @@ const OtherAssets = (props) => {
                         <div className="edit-icons">
                           {/*Edit icon*/}
                           <svg
-                            onClick={() => props.openOverlay(otherAssetdata, 8)}
+                            onClick={() => props.openOverlay({type:"setOverlay", payload:{editFormData:otherAssetdata, overlay:8}})}
                             width="30"
                             height="30"
                             viewBox="0 0 40 40"
@@ -283,6 +285,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setothersdata: (othersdata) => dispatch(othersdata),
+  openOverlay: (overlaytype) => dispatch(overlaytype)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OtherAssets);

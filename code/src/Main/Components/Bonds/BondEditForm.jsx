@@ -1,12 +1,14 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "../form.css";
+import { connect } from "react-redux";
+
 
 const BondEditForm = (props) => {
 
   const [data, setData] = useState({
     type: "2", //Edit Bond
-    ...props.bondData,
+    ...props.editFormData
   });
 
   const [error, setError] = useState({ isSet: false, errorDesc: "" });
@@ -90,14 +92,14 @@ const BondEditForm = (props) => {
         //resetting the form
         setData({
           type: "2", //Edit Bond
-          ...props.bondData,
+          ...props.editFormData
         });
 
         //setting the error
         errorSet(response.data.error);
       } else if (response.status === 200) {
         console.log(response.data);
-        props.setloading(3, 1);
+        props.setLoading({type:"setLoading", payload:{bondLoading:1}})
       }
     } catch (e) {
       console.log(e);
@@ -112,7 +114,7 @@ const BondEditForm = (props) => {
       <div id="box">
         <svg
           id="close"
-          onClick={text === "Edit Bond" ? () => props.overlayhandle(0) : null}
+          onClick={text === "Edit Bond" ? () => props.closeOverlay({type:"setOverlay", payload:{overlay:0}}) : null}
           style={{ background: text === "Edit Bond" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)" }}
           width="24"
           height="24"
@@ -230,5 +232,14 @@ const BondEditForm = (props) => {
 };
 
 
+// these are the functions which are required to map the state to the props and dispatch actions to store
+const mapStateToProps = state => ({
+  ...state
+});
 
-export default BondEditForm;
+const mapDispatchToProps = dispatch => ({
+  closeOverlay: (overlaytype) => dispatch(overlaytype),
+  setLoading: (loadingData) => dispatch(loadingData)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(BondEditForm);

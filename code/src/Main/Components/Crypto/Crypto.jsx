@@ -63,7 +63,8 @@ const Crypto = (props) => {
             {
               crypto:response.data,
               cryptoPurchasePrice: findTotalPurchasePrice(response.data),
-              cryptoLoading: 0
+              cryptoLoading: 0,
+              overlay:0
             }
           }
 
@@ -79,7 +80,8 @@ const Crypto = (props) => {
             {
               crypto:[],
               cryptoPurchasePrice: 0,
-              cryptoLoading: 0
+              cryptoLoading: 0,
+              overlay:0
             }
           }
 
@@ -89,7 +91,7 @@ const Crypto = (props) => {
         
         // props.setloading(2, 0);
 
-        // setDeleteOverlay(-1); //for closing the delete overlay on deleting crypto
+        setDeleteOverlay(-1); //for closing the delete overlay on deleting crypto
         // if (props.currentOpenOverlay === 3 || props.currentOpenOverlay === 4) {
         //   props.addeditoverlayhandle(0); //for closing the add/edit overlay on adding or editing crypto
         // }
@@ -125,7 +127,7 @@ const Crypto = (props) => {
           cryptotid={deleteOverlay} //this variable stores the transaction id of the crypto to be deleted
           setOverlay={setDeleteOverlay}
           height={document.getElementById("crypto").clientHeight}
-          startLoadingAgain={starttoLoad}
+          //startLoadingAgain={starttoLoad}
         />
       )}
       {props.crypto.length > 0 ?
@@ -202,7 +204,7 @@ const Crypto = (props) => {
                           <div className="edit-icons">
                             {/*Edit icon*/}
                             <svg
-                              onClick={() => props.openOverlay(cryptoData, 4)}
+                              onClick={() => props.openOverlay({type:"setOverlay", payload:{editFormData:cryptoData, overlay:4}})}
                               width="30"
                               height="30"
                               viewBox="0 0 40 40"
@@ -287,6 +289,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setcryptodata: (cryptodata) => dispatch(cryptodata),
+  openOverlay: (overlaytype) => dispatch(overlaytype)
 });
 
 

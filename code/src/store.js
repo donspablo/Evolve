@@ -3,9 +3,11 @@ import userassetsreducer from './reducers/userassetsreducer';
 
 let initialstate = {
     // userID: "",
-    assetPurchasePrice: [0, 0, 0, 0],  //1 - stock, 2 - crypto, 3 - bonds, 4 - others
-    assetCurrentPrice: [0, 0, 0, 0],
+    // assetPurchasePrice: [0, 0, 0, 0],  //1 - stock, 2 - crypto, 3 - bonds, 4 - others
+    // assetCurrentPrice: [0, 0, 0, 0],
     //loadingData: [1, 1, 1, 1],
+    overlay:0,
+    editFormData:{},
     stocks: [],
     stockLoading: 1,
     stockPurchasePrice:0,

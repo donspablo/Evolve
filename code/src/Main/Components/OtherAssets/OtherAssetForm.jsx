@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../form.css";
+import { connect } from "react-redux";
 
 const OtherAssetForm = (props) => {
   const [data, setData] = useState({
@@ -97,7 +98,7 @@ const OtherAssetForm = (props) => {
         errorSet(response.data.error);
       } else if (response.status === 200) {
         console.log(response.data);
-        props.setloading(4, 1);
+        props.setLoading({type:"setLoading", payload:{othersLoading:1}})
       }
     } catch (e) {
       console.log(e);
@@ -109,7 +110,7 @@ const OtherAssetForm = (props) => {
       <div id="box">
         <svg
           id="close"
-          onClick={text === "Add Asset" ? () => props.overlayhandle(0) : null}
+          onClick={text === "Add Asset" ? () => props.closeOverlay({type:"setOverlay", payload:{overlay:0}}) : null}
           style={{ background: text === "Add Asset" ? "linear-gradient(180deg, #d11e4b 0%, #ce2331 100%)" : "linear-gradient(180deg, #555 0%, #666 100%)" }}
           width="24"
           height="24"
@@ -209,4 +210,14 @@ const OtherAssetForm = (props) => {
   );
 };
 
-export default OtherAssetForm;
+// these are the functions which are required to map the state to the props and dispatch actions to store
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  closeOverlay: (overlaytype) => dispatch(overlaytype),
+  setLoading: (loadingData) => dispatch(loadingData)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OtherAssetForm);
