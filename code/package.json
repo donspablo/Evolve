@@ -8,7 +8,7 @@
     "snowpack": "^3.0.1"
   },
   "dependencies": {
-    "apexcharts": "^3.26.0",
+    "apexcharts": "^3.35.0",
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
     "react": "^17.0.1",
