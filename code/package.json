@@ -17,6 +17,6 @@
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-tradingview-embed": "^1.0.2",
-    "redux": "^4.1.0"
+    "redux": "^4.2.0"
   }
 }
